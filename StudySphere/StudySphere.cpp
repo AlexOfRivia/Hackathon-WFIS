@@ -8,10 +8,13 @@ StudySphere::StudySphere(QWidget *parent)
 {
     ui.setupUi(this);
     ui.calendarFrame->hide();
+   
     
 
     connect(ui.addExamButton, &QPushButton::clicked, this, &StudySphere::on_addExamButton_clicked);
     connect(ui.addSubjectButton, &QPushButton::clicked, this, &StudySphere::on_addSubjectButton_clicked);
+    connect(ui.backFromInfo, &QPushButton::clicked, this, &StudySphere::on_backFromInfo_clicked);
+  
 }
 
 StudySphere::~StudySphere()
@@ -33,4 +36,9 @@ void StudySphere::on_addSubjectButton_clicked()
 {
     QMessageBox::information(this, "Add Subject", "Add Subject button clicked.");
 
+}
+
+void StudySphere::on_backFromInfo_clicked()
+{
+    ui.infoFrame->hide();
 }
