@@ -511,6 +511,19 @@ QPushButton:Pressed
        <property name="frameShadow">
         <enum>QFrame::Shadow::Raised</enum>
        </property>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>20</y>
+          <width>261</width>
+          <height>241</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Question/Answer&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QPushButton" name="didntGetIt">
        <property name="geometry">
@@ -547,7 +560,7 @@ QPushButton:Pressed
 </string>
        </property>
        <property name="text">
-        <string>Didn't get it</string>
+        <string>Got it wrong</string>
        </property>
       </widget>
       <widget class="QPushButton" name="gotIt">
@@ -585,7 +598,7 @@ QPushButton:Pressed
 </string>
        </property>
        <property name="text">
-        <string>Got it</string>
+        <string>Got it right</string>
        </property>
       </widget>
       <widget class="QPushButton" name="showAnswerButton">

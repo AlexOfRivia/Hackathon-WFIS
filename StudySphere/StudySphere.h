@@ -27,6 +27,9 @@ public:
 
 	void addFlashCard(); //Function to add a flash card
 
+	void showAnswer(); //Function to show the answer of the flash card
+	void didGetIt(); //Function to show the answer of the flash card
+
 private:
 	Ui::StudySphereClass ui; //UI object
     std::vector<QString> subjectsVector;

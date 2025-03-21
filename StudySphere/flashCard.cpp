@@ -7,6 +7,16 @@ std::string flashCard::getSubject()
 	return this->subject;
 }
 
+std::string flashCard::getQuestion()
+{
+	return this->question;
+}
+
+std::string flashCard::getAnswer()
+{
+	return this->answer;
+}
+
 //Function to set the subject of the flashcard
 void flashCard::setSubject(std::string sub)
 {

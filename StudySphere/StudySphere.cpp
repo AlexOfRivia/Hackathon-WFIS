@@ -83,6 +83,18 @@ void StudySphere::addFlashCard()
 	}
 }
 
+//Function to show the answer of the flash card
+void StudySphere::showAnswer()
+{
+	//ui.questionAnswerLabel.setText(flashCardsVector[0].getAnswer()); //Setting the answer of the flash card to the label
+}
+
+//Function for checking if got it wrong or right
+void StudySphere::didGetIt()
+{
+
+}
+
 //Function to show the calendar
 void StudySphere::showCalendar()
 {
