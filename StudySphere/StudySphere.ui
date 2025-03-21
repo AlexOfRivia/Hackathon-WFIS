@@ -143,28 +143,25 @@ QPushButton:Pressed
       <string>Study Calendar</string>
      </property>
     </widget>
-    <widget class="QFrame" name="calendarFrame">
+    <widget class="QFrame" name="flashCardFrame">
      <property name="geometry">
       <rect>
        <x>0</x>
        <y>0</y>
        <width>901</width>
-       <height>581</height>
+       <height>561</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QFrame
-{
-	background-color:rgb(37,37,37);
-}</string>
+      <string notr="true"/>
      </property>
      <property name="frameShape">
       <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Shadow::Plain</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
-     <widget class="QFrame" name="buttonHolder">
+     <widget class="QFrame" name="frame_2">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -185,7 +182,7 @@ QPushButton:Pressed
       <property name="frameShadow">
        <enum>QFrame::Shadow::Raised</enum>
       </property>
-      <widget class="QPushButton" name="backButton">
+      <widget class="QPushButton" name="backButton2">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -223,12 +220,12 @@ QPushButton:Pressed
         <string>Back</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="addExamButton">
+      <widget class="QPushButton" name="addNewSubjectButton">
        <property name="geometry">
         <rect>
-         <x>800</x>
+         <x>500</x>
          <y>0</y>
-         <width>81</width>
+         <width>101</width>
          <height>41</height>
         </rect>
        </property>
@@ -258,62 +255,202 @@ QPushButton:Pressed
 </string>
        </property>
        <property name="text">
-        <string>Add Exam</string>
+        <string>Add new subject</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="addSubjectButton">
+      <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
-         <x>710</x>
-         <y>0</y>
-         <width>81</width>
-         <height>41</height>
+         <x>610</x>
+         <y>10</y>
+         <width>101</width>
+         <height>21</height>
         </rect>
        </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton{
-	font: 700 10pt &quot;Cambria Math&quot;;
-	color: rgba(200,200,200,225);
-	background-color: rgba(4,30,176,255);		
-	border-radius: 15px;
-	border-style: outset;
-    border-width: 2px;
-    border-color: rgba(4,30,80,255);	
-}
-QPushButton:Hover
-{
-	background-color: rgba(4,30,146,255);	
-	border: inset;
-}
-QPushButton:Pressed
-{
-	background-color: rgba(4,30,120,255);	
-	border: inset;
-}
-
-
-
-</string>
+       <property name="font">
+        <font>
+         <family>Cambria Math</family>
+         <pointsize>12</pointsize>
+        </font>
        </property>
        <property name="text">
-        <string>Add Subject</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; color:#ffffff;&quot;&gt;Subject&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </widget>
-     <widget class="QCalendarWidget" name="calendarWidget">
+     <widget class="QFrame" name="calendarFrame">
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>40</y>
+        <y>0</y>
         <width>901</width>
-        <height>531</height>
+        <height>581</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">QFrame
+{
+	background-color:rgb(37,37,37);
+}</string>
       </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Plain</enum>
+      </property>
+      <widget class="QFrame" name="buttonHolder">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>901</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QFrame
+{
+	background-color: rgb(27,27,27);
+}</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Shape::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Shadow::Raised</enum>
+       </property>
+       <widget class="QPushButton" name="backButton">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>81</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{
+	font: 700 10pt &quot;Cambria Math&quot;;
+	color: rgba(200,200,200,225);
+	background-color: rgba(4,30,176,255);		
+	border-radius: 15px;
+	border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);	
+}
+QPushButton:Hover
+{
+	background-color: rgba(4,30,146,255);	
+	border: inset;
+}
+QPushButton:Pressed
+{
+	background-color: rgba(4,30,120,255);	
+	border: inset;
+}
+
+
+
+</string>
+        </property>
+        <property name="text">
+         <string>Back</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="addExamButton">
+        <property name="geometry">
+         <rect>
+          <x>800</x>
+          <y>0</y>
+          <width>81</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{
+	font: 700 10pt &quot;Cambria Math&quot;;
+	color: rgba(200,200,200,225);
+	background-color: rgba(4,30,176,255);		
+	border-radius: 15px;
+	border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);	
+}
+QPushButton:Hover
+{
+	background-color: rgba(4,30,146,255);	
+	border: inset;
+}
+QPushButton:Pressed
+{
+	background-color: rgba(4,30,120,255);	
+	border: inset;
+}
+
+
+
+</string>
+        </property>
+        <property name="text">
+         <string>Add Exam</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="addSubjectButton">
+        <property name="geometry">
+         <rect>
+          <x>710</x>
+          <y>0</y>
+          <width>81</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{
+	font: 700 10pt &quot;Cambria Math&quot;;
+	color: rgba(200,200,200,225);
+	background-color: rgba(4,30,176,255);		
+	border-radius: 15px;
+	border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);	
+}
+QPushButton:Hover
+{
+	background-color: rgba(4,30,146,255);	
+	border: inset;
+}
+QPushButton:Pressed
+{
+	background-color: rgba(4,30,120,255);	
+	border: inset;
+}
+
+
+
+</string>
+        </property>
+        <property name="text">
+         <string>Add Subject</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QCalendarWidget" name="calendarWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>40</y>
+         <width>901</width>
+         <height>531</height>
+        </rect>
+       </property>
+      </widget>
      </widget>
     </widget>
+    <zorder>flashCardsButton</zorder>
+    <zorder>calendarButton</zorder>
+    <zorder>mainTitle</zorder>
+    <zorder>flashCardFrame</zorder>
    </widget>
   </widget>
  </widget>
@@ -321,38 +458,5 @@ QPushButton:Pressed
  <resources>
   <include location="StudySphere.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>calendarButton</sender>
-   <signal>clicked()</signal>
-   <receiver>calendarFrame</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>639</x>
-     <y>350</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>482</x>
-     <y>503</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>backButton</sender>
-   <signal>clicked()</signal>
-   <receiver>calendarFrame</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>59</x>
-     <y>26</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>100</x>
-     <y>90</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

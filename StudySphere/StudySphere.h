@@ -15,6 +15,11 @@ public:
     StudySphere(QWidget *parent = nullptr); //Constructor
 	~StudySphere(); //Destructor
 	void addNewSubject(); //Function to add a new subject to the flashcard
+	void showCalendar(); //Function to show the calendar
+
+	void showFlashCards(); //Function to show the flash cards
+	void hideCalendar(); //Function to hide the calendar
+	void hideFlashCards(); //Function to hide the flash cards
 
 private:
 	Ui::StudySphereClass ui; //UI object
