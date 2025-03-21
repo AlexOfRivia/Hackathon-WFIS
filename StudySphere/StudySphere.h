@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_StudySphere.h"
+#include <string>
 
 class StudySphere : public QMainWindow
 {
@@ -10,12 +11,15 @@ class StudySphere : public QMainWindow
 public:
     StudySphere(QWidget *parent = nullptr);
     ~StudySphere();
+    
 
 private slots:
-    // Add these slot methods
     void on_addExamButton_clicked();
     void on_addSubjectButton_clicked();
     void on_backFromInfo_clicked();
+    void saveToJson(const std::string& date, const std::string& name, const std::string& startTime, const std::string& endTime, const std::string& note, const std::string& filename);
+    void saveToJson(const std::string& date, const std::string& name, const std::string& startTime, const std::string& endTime, const std::string& room, const std::string& isRetake, const std::string& note, const std::string& filename);
+    
 
 private:
     Ui::StudySphereClass ui;
