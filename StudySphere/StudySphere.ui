@@ -1,28 +1,150 @@
-<UI version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>StudySphereClass</class>
- <widget class="QMainWindow" name="StudySphereClass" >
-  <property name="objectName" >
-   <string notr="true">StudySphereClass</string>
-  </property>
-  <property name="geometry" >
+ <widget class="QMainWindow" name="StudySphereClass">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>885</width>
+    <height>563</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>StudySphere</string>
-  </property>  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>891</width>
+      <height>571</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QFrame
+{
+	background-color:rgb(37,37,37)
+}</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Raised</enum>
+    </property>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>40</y>
+       <width>451</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Cambria Math</family>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:48pt; color:#ffffff;&quot;&gt;StudySphere&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="flashCardsButton">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>340</y>
+       <width>251</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Cambria Math</family>
+       <pointsize>20</pointsize>
+       <italic>false</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	font: 700 20pt &quot;Cambria Math&quot;;
+	color: rgba(200,200,200,225);
+	background-color: rgba(4,30,176,255);		
+	border-radius: 15px;
+	border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);	
+}
+QPushButton:Hover
+{
+	background-color: rgba(4,30,146,255);	
+	border: inset;
+}
+QPushButton:Pressed
+{
+	background-color: rgba(4,30,120,255);	
+	border: inset;
+}
+
+
+
+</string>
+     </property>
+     <property name="text">
+      <string>Flash Cards</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="calendarButton">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>340</y>
+       <width>251</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	font: 700 20pt &quot;Cambria Math&quot;;
+	color: rgba(200,200,200,225);
+	background-color: rgba(4,30,176,255);		
+	border-radius: 15px;
+	border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);	
+}
+QPushButton:Hover
+{
+	background-color: rgba(4,30,146,255);	
+	border: inset;
+}
+QPushButton:Pressed
+{
+	background-color: rgba(4,30,120,255);	
+	border: inset;
+}
+
+
+
+</string>
+     </property>
+     <property name="text">
+      <string>Study Calendar</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources>
-   <include location="StudySphere.qrc"/>
+  <include location="StudySphere.qrc"/>
  </resources>
  <connections/>
-</UI>
+</ui>
