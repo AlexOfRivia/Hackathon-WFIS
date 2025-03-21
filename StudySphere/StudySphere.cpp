@@ -6,6 +6,7 @@ StudySphere::StudySphere(QWidget *parent)
 	ui.setupUi(this); //setting up the UI
     //setting the calendar frame as hidden
 	ui.calendarFrame->setParent(ui.mainScreenFrame); //setting the calendar frame as a child of the central widget 
+	ui.centralWidget->setParent(ui.calendarFrame); //setting the calendar widget as a child of the calendar frame
 	ui.calendarFrame->hide(); //hide the calendar frame
 	ui.flashCardFrame->hide(); //hide the flash card frame
 
