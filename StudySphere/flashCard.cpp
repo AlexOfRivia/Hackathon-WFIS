@@ -13,6 +13,18 @@ void flashCard::setSubject(std::string sub)
 	this->subject = sub;
 }
 
+//Function to set the subject of the flashcard
+void flashCard::setQuestion(std::string ques)
+{
+	this->question = ques;
+}
+
+//Function to set the subject of the flashcard
+void flashCard::setAnswer(std::string ans)
+{
+	this->answer = ans;
+}
+
 //Constructor
 flashCard::flashCard()
 {

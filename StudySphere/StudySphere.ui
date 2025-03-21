@@ -10,6 +10,12 @@
     <height>566</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>898</width>
+    <height>566</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>StudySphere</string>
   </property>
@@ -287,6 +293,44 @@ QPushButton:Pressed
         </rect>
        </property>
       </widget>
+      <widget class="QPushButton" name="addFlashCardButton">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>0</y>
+         <width>101</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	font: 700 10pt &quot;Cambria Math&quot;;
+	color: rgba(200,200,200,225);
+	background-color: rgba(4,30,176,255);		
+	border-radius: 15px;
+	border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);	
+}
+QPushButton:Hover
+{
+	background-color: rgba(4,30,146,255);	
+	border: inset;
+}
+QPushButton:Pressed
+{
+	background-color: rgba(4,30,120,255);	
+	border: inset;
+}
+
+
+
+</string>
+       </property>
+       <property name="text">
+        <string>Add Flash Card</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QFrame" name="calendarFrame">
       <property name="geometry">
@@ -444,6 +488,143 @@ QPushButton:Pressed
          <string>Add Subject</string>
         </property>
        </widget>
+      </widget>
+      <widget class="QFrame" name="flashCard">
+       <property name="geometry">
+        <rect>
+         <x>300</x>
+         <y>130</y>
+         <width>311</width>
+         <height>271</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QFrame
+{
+	background-color:#FFFFFF;
+	border-radius: 20;
+}</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Shape::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Shadow::Raised</enum>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="didntGetIt">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>450</y>
+         <width>131</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	font: 700 10pt &quot;Cambria Math&quot;;
+	color: rgba(200,200,200,225);
+	background-color: rgba(4,30,176,255);		
+	border-radius: 15px;
+	border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);	
+}
+QPushButton:Hover
+{
+	background-color: rgba(4,30,146,255);	
+	border: inset;
+}
+QPushButton:Pressed
+{
+	background-color: rgba(4,30,120,255);	
+	border: inset;
+}
+
+
+
+</string>
+       </property>
+       <property name="text">
+        <string>Didn't get it</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="gotIt">
+       <property name="geometry">
+        <rect>
+         <x>590</x>
+         <y>450</y>
+         <width>131</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	font: 700 10pt &quot;Cambria Math&quot;;
+	color: rgba(200,200,200,225);
+	background-color: rgba(4,30,176,255);		
+	border-radius: 15px;
+	border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);	
+}
+QPushButton:Hover
+{
+	background-color: rgba(4,30,146,255);	
+	border: inset;
+}
+QPushButton:Pressed
+{
+	background-color: rgba(4,30,120,255);	
+	border: inset;
+}
+
+
+
+</string>
+       </property>
+       <property name="text">
+        <string>Got it</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="showAnswerButton">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>450</y>
+         <width>131</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	font: 700 10pt &quot;Cambria Math&quot;;
+	color: rgba(200,200,200,225);
+	background-color: rgba(4,30,176,255);		
+	border-radius: 15px;
+	border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);	
+}
+QPushButton:Hover
+{
+	background-color: rgba(4,30,146,255);	
+	border: inset;
+}
+QPushButton:Pressed
+{
+	background-color: rgba(4,30,120,255);	
+	border: inset;
+}
+
+
+
+</string>
+       </property>
+       <property name="text">
+        <string>Show Answer</string>
+       </property>
       </widget>
      </widget>
      <zorder>calendarFrame</zorder>

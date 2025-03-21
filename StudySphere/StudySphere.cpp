@@ -7,12 +7,20 @@ StudySphere::StudySphere(QWidget *parent)
 	ui.setupUi(this); //setting up the UI
     //setting the calendar frame as hidden
 	ui.calendarFrame->setParent(ui.mainScreenFrame); //setting the calendar frame as a child of the central widget 
+	ui.flashCard->setParent(ui.flashCardFrame); //setting the flash card as a child of the flash card frame
+	ui.didntGetIt->setParent(ui.flashCardFrame); //setting the didnt get it button as a child of the flash card frame
+	ui.gotIt->setParent(ui.flashCardFrame); //setting the got it button as a child of the flash card frame
+	ui.showAnswerButton->setParent(ui.flashCardFrame); //setting the show answer button as a child of the flash card frame); //setting the show answer button as a child of the flash card frame
 	//ui.calendarWidget->setParent(ui.calendarFrame); //setting the calendar widget as a child of the calendar frame
 	ui.calendarFrame->hide(); //hide the calendar frame
 	ui.flashCardFrame->hide(); //hide the flash card frame
 
 	QObject::connect(
 		ui.addNewSubjectButton, &QPushButton::clicked, this, &StudySphere::addNewSubject //connecting the add subject button to the addNewSubject function
+	);
+
+	QObject::connect(
+		ui.addFlashCardButton, &QPushButton::clicked, this, &StudySphere::addFlashCard //connecting the add flas card button to the addFlashCard function
 	);
 
 	QObject::connect(
@@ -41,7 +49,37 @@ void StudySphere::addFlashCard()
 		QMessageBox::warning(this, "Error", "You have no subjects .");
 		return;
 	} else {
-		
+		QDialog dialog(this); // Creating a dialog box
+		dialog.setWindowTitle("Enter Flash Card info"); // Setting the title of the dialog box
+
+		QVBoxLayout layout(&dialog);// Creating a layout for the dialog
+		QComboBox comboBox(&dialog); // Creating a combo box widget
+		QLineEdit questionLineEdit(&dialog); // Creating a line edit widget for the question
+		QLineEdit answerLineEdit(&dialog); // Creating a line edit widget for the answer
+		QPushButton* okButton = new QPushButton("OK", &dialog); // Creating an OK button
+
+		for (int i = 0; i < subjectsVector.size(); i++) //Looping through the subjects vector
+		{ 
+			comboBox.addItem(subjectsVector[i]); //Adding the subjects to the combo box
+		}
+
+		layout.addWidget(&comboBox); //Adding the line edit to the layout
+		layout.addWidget(new QLabel("Question: ", &dialog));
+		layout.addWidget(&questionLineEdit); //Adding the line edit to the layout
+		layout.addWidget(new QLabel("Answer: ", &dialog));
+		layout.addWidget(&answerLineEdit); //Adding the line edit to the layout
+		layout.addWidget(okButton); //Adding the OK button to the layout
+
+		QObject::connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept); //Connecting the OK button to accept the dialog
+
+		if (dialog.exec() == QDialog::Accepted) //Executing the dialog and checking if it was accepted
+		{ 
+			flashCard newFlashCard; //Creating a new flash card object
+			newFlashCard.setSubject(comboBox.currentText().toStdString()); //Setting the subject of the flash card
+			newFlashCard.setQuestion(questionLineEdit.text().toStdString()); //Setting the question of the flash card
+			newFlashCard.setAnswer(answerLineEdit.text().toStdString()); //Setting the answer of the flash card
+			flashCardsVector.push_back(newFlashCard); //Adding the flash card to the vector
+		}
 	}
 }
 
