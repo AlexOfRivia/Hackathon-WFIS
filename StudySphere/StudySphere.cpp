@@ -28,6 +28,14 @@ StudySphere::StudySphere(QWidget *parent)
 	);
 
 	QObject::connect(
+		ui.gotIt, &QPushButton::clicked, this, [=]() { this->didGetIt(true); } //connecting the got it button to the didGetIt function
+	);
+
+	QObject::connect(
+		ui.didntGetIt, &QPushButton::clicked, this, [=]() { this->didGetIt(false); } //connecting the got it button to the didGetIt function
+	);
+
+	QObject::connect(
 		ui.showAnswerButton, &QPushButton::clicked, this, &StudySphere::showAnswer //connecting the show answer button to the showAnswer function
 	);
 
@@ -103,25 +111,56 @@ void StudySphere::study()
 	{
 		QMessageBox::warning(this, "Error", "You have no flash cards added.");
 		return;
-	} else {
+	}
+	else {
 		ui.flashCard->show(); //show the flash card
 		ui.didntGetIt->show(); //show the didnt get it button
 		ui.gotIt->show(); //show the got it button
 		ui.showAnswerButton->show(); //show the show answer button
-		ui.qaLabel->setText(QString::fromStdString(flashCardsVector[0].getQuestion())); //Setting the question of the flash card to the label	
+
+		//Clear the temporary flash cards vector
+		temporaryFlashCards.clear();
+
+		//Populate the temporary flash cards vector based on the selected subject
+		for (int i = 0; i < flashCardsVector.size(); i++) //Looping through the flash cards vector
+		{
+			if (flashCardsVector[i].getSubject() == ui.subjectsComboBox->currentText().toStdString()) //Checking if the subject of the flash card is equal to the subject in the combo box
+			{
+				temporaryFlashCards.push_back(flashCardsVector[i]); //Adding the flash cards to the temporary flash cards vector
+			}
+		}
+
+		//Check if there are any flash cards for the selected subject
+		if (temporaryFlashCards.empty())
+		{
+			QMessageBox::warning(this, "Error", "No flash cards found for the selected subject.");
+			return;
+		}
+
+		// Reset the index
+		this->index = 0;
+
+		// Set the question of the first flash card in the temporary vector to the label
+		ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getQuestion())); //Setting the question of the flash card to the label
 	}
 }
 
+
 //Function to show the answer of the flash card
-void StudySphere::showAnswer(int index)
+void StudySphere::showAnswer()
 {
-	ui.qaLabel->setText(QString::fromStdString(flashCardsVector[0].getAnswer()));  //Setting the answer of the flash card to the label
+	ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getAnswer()));  //Setting the answer of the flash card to the label
 }
 
 //Function for checking if got it wrong or right
 void StudySphere::didGetIt(bool wasRight)
 {
-
+		this->index++; // Incrementing the index
+		if (index >= temporaryFlashCards.size())
+		{
+			this->index = 0;
+		}
+		ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getQuestion())); // Setting the question of the flash card to the label
 }
 
 //Function to show the calendar
