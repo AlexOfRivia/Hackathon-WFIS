@@ -6,6 +6,10 @@
 #include "flashCard.h" //Include flashCard class
 #include <QDialog>
 #include <QLineEdit>
+#include <QString>
+#include <QMessageBox>
+#include <QVBoxLayout>
+
 
 class StudySphere : public QMainWindow
 {
@@ -21,8 +25,11 @@ public:
 	void hideCalendar(); //Function to hide the calendar
 	void hideFlashCards(); //Function to hide the flash cards
 
+	void addFlashCard(); //Function to add a flash card
+
 private:
 	Ui::StudySphereClass ui; //UI object
-    std::vector<std::string> subjectsVector;
+    std::vector<QString> subjectsVector;
 	std::vector<flashCard> flashCardsVector;
+	std::vector<flashCard> temporaryFlashCards; //For sorting by subject
 };

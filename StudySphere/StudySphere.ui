@@ -445,17 +445,9 @@ QPushButton:Pressed
         </property>
        </widget>
       </widget>
-      <widget class="QCalendarWidget" name="calendarWidget">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>40</y>
-         <width>901</width>
-         <height>531</height>
-        </rect>
-       </property>
-      </widget>
      </widget>
+     <zorder>calendarFrame</zorder>
+     <zorder>frame_2</zorder>
     </widget>
     <zorder>flashCardsButton</zorder>
     <zorder>calendarButton</zorder>
