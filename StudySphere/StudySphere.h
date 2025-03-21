@@ -24,15 +24,15 @@ public:
 	void showFlashCards(); //Function to show the flash cards
 	void hideCalendar(); //Function to hide the calendar
 	void hideFlashCards(); //Function to hide the flash cards
-
 	void addFlashCard(); //Function to add a flash card
-
-	void showAnswer(); //Function to show the answer of the flash card
-	void didGetIt(); //Function to show the answer of the flash card
+	void showAnswer(int index); //Function to show the answer of the flash card
+	void study(); //Function to study the flash cards
+	void didGetIt(bool wasRight); //Function to show the answer of the flash card
 
 private:
 	Ui::StudySphereClass ui; //UI object
     std::vector<QString> subjectsVector;
 	std::vector<flashCard> flashCardsVector;
 	std::vector<flashCard> temporaryFlashCards; //For sorting by subject
+	
 };

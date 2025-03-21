@@ -10,6 +10,10 @@ StudySphere::StudySphere(QWidget *parent)
 	ui.flashCard->setParent(ui.flashCardFrame); //setting the flash card as a child of the flash card frame
 	ui.didntGetIt->setParent(ui.flashCardFrame); //setting the didnt get it button as a child of the flash card frame
 	ui.gotIt->setParent(ui.flashCardFrame); //setting the got it button as a child of the flash card frame
+	ui.flashCard->hide(); //hide the flash card
+	ui.didntGetIt->hide(); //hide the didnt get it button
+	ui.gotIt->hide(); //hide the got it button
+	ui.showAnswerButton->hide(); //hide the show answer button
 	ui.showAnswerButton->setParent(ui.flashCardFrame); //setting the show answer button as a child of the flash card frame); //setting the show answer button as a child of the flash card frame
 	//ui.calendarWidget->setParent(ui.calendarFrame); //setting the calendar widget as a child of the calendar frame
 	ui.calendarFrame->hide(); //hide the calendar frame
@@ -22,6 +26,15 @@ StudySphere::StudySphere(QWidget *parent)
 	QObject::connect(
 		ui.addFlashCardButton, &QPushButton::clicked, this, &StudySphere::addFlashCard //connecting the add flas card button to the addFlashCard function
 	);
+
+	QObject::connect(
+		ui.showAnswerButton, &QPushButton::clicked, this, &StudySphere::showAnswer //connecting the show answer button to the showAnswer function
+	);
+
+	QObject::connect(
+		ui.studyButton, &QPushButton::clicked, this, &StudySphere::study //connecting the study button to the study function
+	);
+	
 
 	QObject::connect(
 		ui.calendarButton, &QPushButton::clicked, this, &StudySphere::showCalendar //connecting the calendar button to the showCalendar function
@@ -83,14 +96,30 @@ void StudySphere::addFlashCard()
 	}
 }
 
-//Function to show the answer of the flash card
-void StudySphere::showAnswer()
+//Function to study the flash cards
+void StudySphere::study()
 {
-	//ui.questionAnswerLabel.setText(flashCardsVector[0].getAnswer()); //Setting the answer of the flash card to the label
+	if (flashCardsVector.empty())
+	{
+		QMessageBox::warning(this, "Error", "You have no flash cards added.");
+		return;
+	} else {
+		ui.flashCard->show(); //show the flash card
+		ui.didntGetIt->show(); //show the didnt get it button
+		ui.gotIt->show(); //show the got it button
+		ui.showAnswerButton->show(); //show the show answer button
+		ui.qaLabel->setText(QString::fromStdString(flashCardsVector[0].getQuestion())); //Setting the question of the flash card to the label	
+	}
+}
+
+//Function to show the answer of the flash card
+void StudySphere::showAnswer(int index)
+{
+	ui.qaLabel->setText(QString::fromStdString(flashCardsVector[0].getAnswer()));  //Setting the answer of the flash card to the label
 }
 
 //Function for checking if got it wrong or right
-void StudySphere::didGetIt()
+void StudySphere::didGetIt(bool wasRight)
 {
 
 }
