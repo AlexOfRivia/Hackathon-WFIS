@@ -310,6 +310,101 @@ QPushButton:Pressed
        </rect>
       </property>
      </widget>
+     <widget class="QFrame" name="frame">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>911</width>
+        <height>561</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>80</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+    font: 700 10pt &quot;Cambria Math&quot;;
+    color: rgba(200,200,200,225);
+    background-color: rgba(4,30,176,255);
+    border-radius: 15px;
+    border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);
+}
+QPushButton:Hover
+{
+    background-color: rgba(4,30,146,255);
+    border: inset;
+}
+QPushButton:Pressed
+{
+    background-color: rgba(4,30,120,255);
+    border: inset;
+}</string>
+       </property>
+       <property name="text">
+        <string>Back</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="tableWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>881</width>
+         <height>521</height>
+        </rect>
+       </property>
+       <property name="rowCount">
+        <number>6</number>
+       </property>
+       <property name="columnCount">
+        <number>6</number>
+       </property>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <row/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+       <column/>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>80</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>TEST</string>
+      </property>
+     </widget>
+     <zorder>buttonHolder</zorder>
+     <zorder>calendarWidget</zorder>
+     <zorder>pushButton</zorder>
+     <zorder>frame</zorder>
     </widget>
    </widget>
   </widget>
