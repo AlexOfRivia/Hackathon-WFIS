@@ -69,6 +69,8 @@ StudySphere::StudySphere(QWidget *parent)
     ui.showAnswerButton->setParent(ui.flashCardFrame); //setting the show answer button as a child of the flash card frame
     ui.calendarWidget->setParent(ui.calendarFrame); //setting the calendar widget as a child of the calendar frame
     ui.flashCardFrame->hide(); //hide the flash card frame
+
+    ui.calendarWidget->setStyleSheet(calendarHeaderStyleSheet); //setting the style sheet of the calendar widget
     
     ui.wrongLabel->setParent(ui.flashCardFrame); //setting the wrong label as a child of the flash card frame)
     ui.rightLabel->setParent(ui.flashCardFrame); //setting the right label as a child of the flash card frame
@@ -80,6 +82,10 @@ StudySphere::StudySphere(QWidget *parent)
 
     ui.wrongLabel->setStyleSheet("QLabel { color : #cbc5c5; }"); 
     ui.rightLabel->setStyleSheet("QLabel { color : #cbc5c5; }");
+
+    // Enable word wrapping for qaLabel
+    ui.qaLabel->setWordWrap(true);
+    ui.qaLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
 
     // Connect signals and slots for flashcard functionality

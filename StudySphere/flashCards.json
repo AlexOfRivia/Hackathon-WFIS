@@ -1,14 +1,19 @@
 {
     "flashCards": [
         {
-            "answer": "sad",
-            "question": "dwqd",
-            "subject": "cdsfsa"
+            "answer": "4",
+            "question": "what is 2+2",
+            "subject": "math"
         },
         {
-            "answer": "dw2edewefeq",
-            "question": "dwqed",
-            "subject": "wqsad"
+            "answer": "a^2 + b^2 = c^2",
+            "question": "Pythagoraem Theorem",
+            "subject": "math"
+        },
+        {
+            "answer": "Macierz Jednostkowa",
+            "question": "Jaka macierz posiada na diagonalnej same jedynki, a dookoła zera",
+            "subject": "Algebra Liniowa"
         }
     ]
 }
