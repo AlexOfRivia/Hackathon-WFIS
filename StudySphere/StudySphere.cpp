@@ -3,7 +3,6 @@
 StudySphere::StudySphere(QWidget *parent)
     : QMainWindow(parent)
 {
-
 	ui.setupUi(this); //setting up the UI
     //setting the calendar frame as hidden
 	ui.calendarFrame->setParent(ui.mainScreenFrame); //setting the calendar frame as a child of the central widget 
@@ -15,7 +14,7 @@ StudySphere::StudySphere(QWidget *parent)
 	ui.gotIt->hide(); //hide the got it button
 	ui.showAnswerButton->hide(); //hide the show answer button
 	ui.showAnswerButton->setParent(ui.flashCardFrame); //setting the show answer button as a child of the flash card frame); //setting the show answer button as a child of the flash card frame
-	//ui.calendarWidget->setParent(ui.calendarFrame); //setting the calendar widget as a child of the calendar frame
+	ui.calendarWidget->setParent(ui.calendarFrame); //setting the calendar widget as a child of the calendar frame
 	ui.calendarFrame->hide(); //hide the calendar frame
 	ui.flashCardFrame->hide(); //hide the flash card frame
 
@@ -111,8 +110,7 @@ void StudySphere::study()
 	{
 		QMessageBox::warning(this, "Error", "You have no flash cards added.");
 		return;
-	}
-	else {
+	} else {
 		ui.flashCard->show(); //show the flash card
 		ui.didntGetIt->show(); //show the didnt get it button
 		ui.gotIt->show(); //show the got it button
@@ -154,6 +152,77 @@ void StudySphere::showAnswer()
 	//Set the alignment of the label to center
 	ui.qaLabel->setAlignment(Qt::AlignCenter);
 	ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getAnswer()));  //Setting the answer of the flash card to the label
+}
+
+//Saving to JSON file
+void StudySphere::saveToJSON()
+{
+	//Creating a JSON object
+	QJsonObject jsonObject;
+	//Creating a JSON array
+	QJsonArray jsonArray;
+	//Looping through the flash cards vector
+	for (int i = 0; i < flashCardsVector.size(); i++)
+	{
+		//Creating a JSON object
+		QJsonObject flashCardObject;
+		//Adding the subject of the flash card to the JSON object
+		flashCardObject["subject"] = QString::fromStdString(flashCardsVector[i].getSubject());
+		//Adding the question of the flash card to the JSON object
+		flashCardObject["question"] = QString::fromStdString(flashCardsVector[i].getQuestion());
+		//Adding the answer of the flash card to the JSON object
+		flashCardObject["answer"] = QString::fromStdString(flashCardsVector[i].getAnswer());
+		//Adding the JSON object to the JSON array
+		jsonArray.append(flashCardObject);
+	}
+	//Adding the JSON array to the JSON object
+	jsonObject["flashCards"] = jsonArray;
+	//Creating a JSON document
+	QJsonDocument jsonDocument(jsonObject);
+	//Creating a file object
+	QFile file("flashCards.json");
+	//Opening the file in write mode
+	file.open(QIODevice::WriteOnly);
+	//Writing the JSON document to the file
+	file.write(jsonDocument.toJson());
+	//Closing the file
+	file.close();
+}
+
+//Loading from JSON file
+void StudySphere::loadFromJSON()
+{
+	//Creating a file object
+	QFile file("flashCards.json");
+	//Opening the file in read mode
+	file.open(QIODevice::ReadOnly);
+	//Creating a JSON document
+	QJsonDocument jsonDocument = QJsonDocument::fromJson(file.readAll());
+	//Closing the file
+	file.close();
+	//Creating a JSON object
+	QJsonObject jsonObject = jsonDocument.object();
+	//Creating a JSON array
+	QJsonArray jsonArray = jsonObject["flashCards"].toArray();
+	//Clearing the flash cards vector
+	flashCardsVector.clear();
+	//Looping through the JSON array
+	for (int i = 0; i < jsonArray.size(); i++)
+	{
+		//Creating a JSON object
+		QJsonObject flashCardObject = jsonArray[i].toObject();
+		//Creating a flash card object
+		flashCard newFlashCard;
+		//Setting the subject of the flash card
+		newFlashCard.setSubject(flashCardObject["subject"].toString().toStdString());
+		//this->subjectsVector.push_back(QString::fromStdString(flashCardsVector[i].getSubject()));
+		//Setting the question of the flash card
+		newFlashCard.setQuestion(flashCardObject["question"].toString().toStdString());
+		//Setting the answer of the flash card
+		newFlashCard.setAnswer(flashCardObject["answer"].toString().toStdString());
+		//Adding the flash card to the flash cards vector
+		flashCardsVector.push_back(newFlashCard);
+	}
 }
 
 //Function for checking if got it wrong or right
@@ -228,4 +297,6 @@ void StudySphere::addNewSubject()
 }
 
 StudySphere::~StudySphere()
-{}
+{
+	this->saveToJSON(); //Saving the flash cards to a JSON file
+}

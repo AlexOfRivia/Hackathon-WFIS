@@ -9,6 +9,20 @@
 #include <QString>
 #include <QMessageBox>
 #include <QVBoxLayout>
+#include <QComboBox>
+#include <QPushButton>
+#include <QLabel>
+#include <QFrame>
+#include <QHBoxLayout>
+#include <QDate>
+#include <QCalendarWidget>
+#include <QTextStream>
+#include <QFile>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonValue>
+
 
 
 class StudySphere : public QMainWindow
@@ -27,6 +41,8 @@ public:
 	void addFlashCard(); //Function to add a flash card
 	void showAnswer(); //Function to show the answer of the flash card
 	void study(); //Function to study the flash cards
+	void saveToJSON(); //Function to save the flash cards to a JSON file
+	void loadFromJSON(); //Function to load the flash cards from a JSON file
 	void didGetIt(bool wasRight); //Function to show the answer of the flash card
 
 private:
