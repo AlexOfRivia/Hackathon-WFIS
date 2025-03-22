@@ -138,9 +138,10 @@ void StudySphere::addFlashCard()
 {
     if (subjectsVector.empty())
     {
-        QMessageBox::warning(this, "Error", "You have no subjects .");
+        QMessageBox::warning(this, "Error", "You have no subjects.");
         return;
-    } else {
+    }
+    else {
         QDialog dialog(this); // Creating a dialog box
         dialog.setWindowTitle("Enter Flash Card info"); // Setting the title of the dialog box
 
@@ -151,11 +152,11 @@ void StudySphere::addFlashCard()
         QPushButton* okButton = new QPushButton("OK", &dialog); // Creating an OK button
 
         for (int i = 0; i < subjectsVector.size(); i++) //Looping through the subjects vector
-        { 
+        {
             comboBox.addItem(subjectsVector[i]); //Adding the subjects to the combo box
         }
 
-		comboBox.setCurrentIndex(ui.subjectsComboBox->currentIndex()); //Setting the current index of the combo box to the subjectComboBox
+        comboBox.setCurrentIndex(ui.subjectsComboBox->currentIndex()); //Setting the current index of the combo box to the subjectComboBox
         layout.addWidget(&comboBox); //Adding the line edit to the layout
         layout.addWidget(new QLabel("Question: ", &dialog));
         layout.addWidget(&questionLineEdit); //Adding the line edit to the layout
@@ -166,7 +167,12 @@ void StudySphere::addFlashCard()
         QObject::connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept); //Connecting the OK button to accept the dialog
 
         if (dialog.exec() == QDialog::Accepted) //Executing the dialog and checking if it was accepted
-        { 
+        {
+            if (questionLineEdit.text().isEmpty() || answerLineEdit.text().isEmpty()) {
+                QMessageBox::warning(this, "Error", "Question and Answer fields cannot be empty.");
+                return;
+            }
+
             flashCard newFlashCard; //Creating a new flash card object
             newFlashCard.setSubject(comboBox.currentText().toStdString()); //Setting the subject of the flash card
             newFlashCard.setQuestion(questionLineEdit.text().toStdString()); //Setting the question of the flash card
@@ -453,6 +459,11 @@ void StudySphere::addNewSubject()
 
     if (dialog.exec() == QDialog::Accepted) { //Executing the dialog and checking if it was accepted
         QString newSubject = lineEdit.text();
+
+        if (newSubject.isEmpty()) {
+            QMessageBox::warning(this, "Error", "Subject name cannot be empty.");
+            return;
+        }
 
         //Check if the subject already exists
         if (std::find(subjectsVector.begin(), subjectsVector.end(), newSubject) != subjectsVector.end()) {
