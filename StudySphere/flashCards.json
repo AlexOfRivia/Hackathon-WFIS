@@ -14,6 +14,16 @@
             "answer": "Macierz Jednostkowa",
             "question": "Jaka macierz posiada na diagonalnej same jedynki, a dookoła zera",
             "subject": "Algebra Liniowa"
+        },
+        {
+            "answer": "f(x) = ax + b",
+            "question": "Wzór funkcji liniowej",
+            "subject": "math"
+        },
+        {
+            "answer": "liczbą, która może przyjmować wartości ujemne lub dodatnie.",
+            "question": "Skalar jest...",
+            "subject": "Algebra Liniowa"
         }
     ]
 }
