@@ -70,7 +70,7 @@ StudySphere::StudySphere(QWidget *parent)
     ui.calendarWidget->setParent(ui.calendarFrame); //setting the calendar widget as a child of the calendar frame
     ui.flashCardFrame->hide(); //hide the flash card frame
 
-    ui.calendarWidget->setStyleSheet(calendarHeaderStyleSheet); //setting the style sheet of the calendar widget
+    //ui.calendarWidget->setStyleSheet(calendarStyleSheet); //setting the style sheet of the calendar widget
     
     ui.wrongLabel->setParent(ui.flashCardFrame); //setting the wrong label as a child of the flash card frame)
     ui.rightLabel->setParent(ui.flashCardFrame); //setting the right label as a child of the flash card frame
@@ -694,8 +694,7 @@ void StudySphere::on_addExamButton_clicked()
     dialog.setWindowTitle("Add Exam for " + selectedDate.toString("yyyy-MM-dd"));
 
     QFormLayout formLayout(&dialog);
-
-    QLineEdit *nameEdit = new QLineEdit(&dialog);
+	QComboBox *subjectCB = new QComboBox(&dialog);
     QLineEdit *roomEdit = new QLineEdit(&dialog);
     QCheckBox *isRetakeEdit = new QCheckBox(&dialog);
     QTimeEdit *startTimeEdit = new QTimeEdit(&dialog);
@@ -710,7 +709,13 @@ void StudySphere::on_addExamButton_clicked()
     QTextEdit *notesEdit = new QTextEdit(&dialog);
     notesEdit->setMaximumHeight(100);
 
-    formLayout.addRow("Subject Name:", nameEdit);
+	// Add subjects to the combo box
+	for (int i = 0; i < subjectsVector.size(); i++)
+	{
+		subjectCB->addItem(subjectsVector[i]);
+	}
+
+    formLayout.addRow("Subject Name:", subjectCB);
     formLayout.addRow("Room:", roomEdit);
     formLayout.addRow("Is it a retake:", isRetakeEdit);
     formLayout.addRow("Start Time:", startTimeEdit);
@@ -725,7 +730,7 @@ void StudySphere::on_addExamButton_clicked()
     connect(&buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
 
     if (dialog.exec() == QDialog::Accepted) {
-        QString name = nameEdit->text();
+        QString name = subjectCB->currentText();
         QString notes = notesEdit->toPlainText();
         QTime startTime = startTimeEdit->time();
         QTime endTime = endTimeEdit->time();
