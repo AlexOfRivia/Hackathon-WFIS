@@ -4,6 +4,12 @@
 #include <QVBoxLayout>
 #include <fstream>
 #include <iostream>
+#include <QTableWidget>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QDebug>
 
 
 StudySphere::StudySphere(QWidget *parent)
@@ -13,12 +19,16 @@ StudySphere::StudySphere(QWidget *parent)
     ui.calendarFrame->hide();
    
     
-
+    std::vector<QString> jsonFiles = {"JsonStronghold/output1.json","JsonStronghold/output2.json","JsonStronghold/output3.json" ,"JsonStronghold/output4.json" };
     connect(ui.addExamButton, &QPushButton::clicked, this, &StudySphere::on_addExamButton_clicked);
     connect(ui.addSubjectButton, &QPushButton::clicked, this, &StudySphere::on_addSubjectButton_clicked);
     connect(ui.backFromInfo, &QPushButton::clicked, this, &StudySphere::on_backFromInfo_clicked);
     saveToJson("2025-12-01", "Biology", "17:00", "18:00","Focus on histopatology", "JsonStronghold/output1.json");
-    saveToJson("2025-12-01", "Biology", "17:00", "18:00","A220","No", "Focus on histopatology", "JsonStronghold/output2.json");
+    saveToJson("2025-12-02", "Math", "13:00", "18:00","A220","No", "Focus on equations", "JsonStronghold/output2.json");
+    saveToJson("2025-12-03", "Linear Algebry", "17:30", "18:00", "b193", "Yes", "Hard", "JsonStronghold/output3.json");
+    saveToJson("2025-12-04", "C++ programing ", "19:00", "20:00", "Overloading", "JsonStronghold/output4.json");
+    populateTableFromJson(ui.infoTable, jsonFiles);
+    
 }
 
 StudySphere::~StudySphere()
@@ -77,7 +87,7 @@ void StudySphere::saveToJson(const std::string& date, const std::string& name, c
     jsonContent += "    \"name\": \"" + name + "\",\n";
     jsonContent += "    \"startTime\": \"" + startTime + "\",\n";
     jsonContent += "    \"endTime\": \"" + endTime + "\",\n";
-    jsonContent += "    \"romm\": \"" + room + "\",\n";
+    jsonContent += "    \"room\": \"" + room + "\",\n";
     jsonContent += "    \"isRetake\": \"" + isRetake + "\",\n";
     jsonContent += "    \"note\": \"" + note + "\"\n";
     jsonContent += "}";
@@ -96,3 +106,56 @@ void StudySphere::saveToJson(const std::string& date, const std::string& name, c
 }
 
 
+void StudySphere::populateTableFromJson(QTableWidget* tableWidget, const std::vector<QString>& jsonFiles) {
+    // Clear the table
+    tableWidget->clear();
+    tableWidget->setRowCount(0);
+    tableWidget->setColumnCount(0);
+
+    // Determine the columns based on the JSON structure
+    QStringList headers = { "Date", "Name", "Start Time", "End Time", "Room", "Is Retake", "Note" };
+    tableWidget->setColumnCount(headers.size());
+    tableWidget->setHorizontalHeaderLabels(headers);
+
+    // Iterate over each JSON file
+    for (const QString& filePath : jsonFiles) {
+        QFile file(filePath);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qWarning() << "Could not open file:" << filePath;
+            continue;
+        }
+
+        QByteArray jsonData = file.readAll();
+        file.close();
+
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+        if (jsonDoc.isNull()) {
+            qWarning() << "Failed to parse JSON in file:" << filePath;
+            continue;
+        }
+
+        QJsonObject jsonObj = jsonDoc.object();
+
+        // Create a new row in the table
+        int row = tableWidget->rowCount();
+        tableWidget->insertRow(row);
+
+        // Populate the row with data from the JSON object
+        tableWidget->setItem(row, 0, new QTableWidgetItem(jsonObj["date"].toString()));
+        tableWidget->setItem(row, 1, new QTableWidgetItem(jsonObj["name"].toString()));
+        tableWidget->setItem(row, 2, new QTableWidgetItem(jsonObj["startTime"].toString()));
+        tableWidget->setItem(row, 3, new QTableWidgetItem(jsonObj["endTime"].toString()));
+        
+
+        // Handle optional fields
+        if (jsonObj.contains("room")) {
+            tableWidget->setItem(row, 4, new QTableWidgetItem(jsonObj["room"].toString()));
+        }
+        if (jsonObj.contains("isRetake")) {
+            tableWidget->setItem(row, 5, new QTableWidgetItem(jsonObj["isRetake"].toString()));
+        }
+        if (jsonObj.contains("note")) {
+            tableWidget->setItem(row, 6, new QTableWidgetItem(jsonObj["note"].toString()));
+        }
+    }
+}
