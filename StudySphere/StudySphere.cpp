@@ -146,16 +146,44 @@ void StudySphere::populateTableFromJson(QTableWidget* tableWidget, const std::ve
         tableWidget->setItem(row, 2, new QTableWidgetItem(jsonObj["startTime"].toString()));
         tableWidget->setItem(row, 3, new QTableWidgetItem(jsonObj["endTime"].toString()));
         
+        int SubjectCaunt = 0;
 
         // Handle optional fields
         if (jsonObj.contains("room")) {
             tableWidget->setItem(row, 4, new QTableWidgetItem(jsonObj["room"].toString()));
+            SubjectCaunt--;
         }
+        
         if (jsonObj.contains("isRetake")) {
             tableWidget->setItem(row, 5, new QTableWidgetItem(jsonObj["isRetake"].toString()));
+            SubjectCaunt--;
         }
         if (jsonObj.contains("note")) {
             tableWidget->setItem(row, 6, new QTableWidgetItem(jsonObj["note"].toString()));
         }
+        if (SubjectCaunt==-2) {
+            QColor backgroundColor("#22092C"); 
+            QColor textColor("#FFFFFF");      
+            for (int col = 0; col < tableWidget->columnCount(); ++col) {
+                QTableWidgetItem* item = tableWidget->item(row, col);
+                if (item) {
+                    item->setBackground(backgroundColor);
+                    item->setForeground(textColor);
+                }
+            }
+        }
+        else {
+            QColor backgroundColor("#872341");
+            QColor textColor("#FFFFFF");
+            for (int col = 0; col < tableWidget->columnCount(); ++col) {
+                QTableWidgetItem* item = tableWidget->item(row, col);
+                if (item) {
+                    item->setBackground(backgroundColor);
+                    item->setForeground(textColor);
+                }
+            }
+        }
+    
+        
     }
 }
