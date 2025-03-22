@@ -140,6 +140,8 @@ void StudySphere::study()
 		// Reset the index
 		this->index = 0;
 
+		//Set the alignment of the label to center
+		ui.qaLabel->setAlignment(Qt::AlignCenter);
 		// Set the question of the first flash card in the temporary vector to the label
 		ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getQuestion())); //Setting the question of the flash card to the label
 	}
@@ -149,6 +151,8 @@ void StudySphere::study()
 //Function to show the answer of the flash card
 void StudySphere::showAnswer()
 {
+	//Set the alignment of the label to center
+	ui.qaLabel->setAlignment(Qt::AlignCenter);
 	ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getAnswer()));  //Setting the answer of the flash card to the label
 }
 
@@ -160,6 +164,9 @@ void StudySphere::didGetIt(bool wasRight)
 		{
 			this->index = 0;
 		}
+
+		//Set the alignment of the label to center
+		ui.qaLabel->setAlignment(Qt::AlignCenter);
 		ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getQuestion())); // Setting the question of the flash card to the label
 }
 
