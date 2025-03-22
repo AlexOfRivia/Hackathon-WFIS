@@ -35,6 +35,41 @@
 #include <QRegularExpression>
 #include <QTextCharFormat>
 
+StudySphere::StudySphere(QWidget *parent)
+    : QMainWindow(parent)
+{
+    ui.setupUi(this);
+    ui.infoFrame->hide();
+    ui.calendarFrame->hide();
+    
+    // Make the table editable
+    ui.infoTable->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
+    
+    // Connect signals and slots
+    connect(ui.backFromInfo, &QPushButton::clicked, this, &StudySphere::on_backFromInfo_clicked);
+    connect(ui.addSubjectButton, &QPushButton::clicked, this, &StudySphere::on_addSubjectButton_clicked);
+    connect(ui.addExamButton, &QPushButton::clicked, this, &StudySphere::on_addExamButton_clicked);
+    connect(ui.calendarWidget, &QCalendarWidget::clicked, this, &StudySphere::on_calendarWidget_clicked);
+    connect(ui.infoTable, &QTableWidget::cellChanged, this, &StudySphere::on_tableCellChanged);
+
+    // Sample data for testing
+    std::vector<QString> jsonFiles = getJsonFiles("2025-03-21");
+    saveToJson("2025-12-01", "Biology", "17:00", "18:00","Focus on histopatology", "JsonStronghold/2025-12-01 Biology.json");
+    saveToJson("2025-12-02", "Math", "13:00", "18:00","A220","No", "Focus on equations", "JsonStronghold/2025-12-02 Math.json");
+    saveToJson("2025-12-03", "Linear Algebry", "17:30", "18:00", "b193", "Yes", "Hard", "JsonStronghold/2025-12-03 Linear Algebry.json");
+    saveToJson("2025-12-04", "C++ programing ", "19:00", "20:00", "Overloading", "JsonStronghold/2025-12-04 C++ programing.json");
+    
+    // Populate table with initial data
+    populateTableFromJson(ui.infoTable, jsonFiles);
+    
+    // Highlight dates with data
+    highlightDatesWithData();
+}
+
+StudySphere::~StudySphere()
+{}
+
+
 std::vector<QString> StudySphere::getJsonFiles(const std::string& date)
 {
     std::vector<QString> jsonFiles;
@@ -109,34 +144,7 @@ void StudySphere::highlightDatesWithData()
     }
 }
 
-StudySphere::StudySphere(QWidget *parent)
-    : QMainWindow(parent)
-{
-    ui.setupUi(this);
-    ui.calendarFrame->hide();
-    
-    // Connect signals and slots
-    connect(ui.backFromInfo, &QPushButton::clicked, this, &StudySphere::on_backFromInfo_clicked);
-    connect(ui.addSubjectButton, &QPushButton::clicked, this, &StudySphere::on_addSubjectButton_clicked);
-    connect(ui.addExamButton, &QPushButton::clicked, this, &StudySphere::on_addExamButton_clicked);
-    connect(ui.calendarWidget, &QCalendarWidget::clicked, this, &StudySphere::on_calendarWidget_clicked);
 
-    // Sample data for testing
-    std::vector<QString> jsonFiles = getJsonFiles("2025-03-21");
-    saveToJson("2025-12-01", "Biology", "17:00", "18:00","Focus on histopatology", "JsonStronghold/output1.json");
-    saveToJson("2025-12-02", "Math", "13:00", "18:00","A220","No", "Focus on equations", "JsonStronghold/output2.json");
-    saveToJson("2025-12-03", "Linear Algebry", "17:30", "18:00", "b193", "Yes", "Hard", "JsonStronghold/output3.json");
-    saveToJson("2025-12-04", "C++ programing ", "19:00", "20:00", "Overloading", "JsonStronghold/output4.json");
-    
-    // Populate table with initial data
-    populateTableFromJson(ui.infoTable, jsonFiles);
-    
-    // Highlight dates with data
-    highlightDatesWithData();
-}
-
-StudySphere::~StudySphere()
-{}
 
 void StudySphere::on_calendarWidget_clicked(const QDate& date)
 {
@@ -144,10 +152,19 @@ void StudySphere::on_calendarWidget_clicked(const QDate& date)
     std::string dateStr = date.toString("yyyy-MM-dd").toStdString();
     std::vector<QString> jsonFiles = getJsonFiles(dateStr);
     
+    // Store the current JSON files for editing
+    currentJsonFiles = jsonFiles;
+    
     // Only show the info frame if there are files
     if (!jsonFiles.empty()) {
+        // Temporarily block signals to prevent triggering cellChanged during population
+        ui.infoTable->blockSignals(true);
+        
         // Populate the table with the JSON data
         populateTableFromJson(ui.infoTable, jsonFiles);
+        
+        // Re-enable signals
+        ui.infoTable->blockSignals(false);
         
         // Show the info frame
         ui.infoFrame->show();
@@ -156,6 +173,78 @@ void StudySphere::on_calendarWidget_clicked(const QDate& date)
         QMessageBox::information(this, "No Records", 
             "No records found for " + date.toString("yyyy-MM-dd"));
     }
+}
+
+void StudySphere::on_tableCellChanged(int row, int column)
+{
+    // Only process if there are current JSON files and row is valid
+    if (row >= 0 && row < ui.infoTable->rowCount() && !currentJsonFiles.empty()) {
+        updateJsonFromTable(row);
+    }
+}
+
+void StudySphere::updateJsonFromTable(int row)
+{
+    // Get the JSON file path for this row
+    if (row >= currentJsonFiles.size()) {
+        qWarning() << "Row index out of bounds for JSON files";
+        return;
+    }
+    
+    QString filePath = currentJsonFiles[row];
+    
+    // Read the current JSON
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Could not open file for update:" << filePath;
+        return;
+    }
+    
+    QByteArray jsonData = file.readAll();
+    file.close();
+    
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData);
+    if (jsonDoc.isNull()) {
+        qWarning() << "Failed to parse JSON in file:" << filePath;
+        return;
+    }
+    
+    QJsonObject jsonObj = jsonDoc.object();
+    
+    // Update the JSON object with values from the table
+    if (ui.infoTable->item(row, 0)) // Date
+        jsonObj["date"] = ui.infoTable->item(row, 0)->text();
+    
+    if (ui.infoTable->item(row, 1)) // Name
+        jsonObj["name"] = ui.infoTable->item(row, 1)->text();
+    
+    if (ui.infoTable->item(row, 2)) // Start Time
+        jsonObj["startTime"] = ui.infoTable->item(row, 2)->text();
+    
+    if (ui.infoTable->item(row, 3)) // End Time
+        jsonObj["endTime"] = ui.infoTable->item(row, 3)->text();
+    
+    if (ui.infoTable->item(row, 4)) // Room (optional)
+        jsonObj["room"] = ui.infoTable->item(row, 4)->text();
+    
+    if (ui.infoTable->item(row, 5)) // Is Retake (optional)
+        jsonObj["isRetake"] = ui.infoTable->item(row, 5)->text();
+    
+    if (ui.infoTable->item(row, 6)) // Note (optional)
+        jsonObj["note"] = ui.infoTable->item(row, 6)->text();
+    
+    // Write the updated JSON back to the file
+    jsonDoc.setObject(jsonObj);
+    
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning() << "Could not open file for writing:" << filePath;
+        return;
+    }
+    
+    file.write(jsonDoc.toJson(QJsonDocument::Indented));
+    file.close();
+    
+    qDebug() << "Updated JSON file:" << filePath;
 }
 
 void StudySphere::on_addExamButton_clicked()
@@ -210,10 +299,20 @@ void StudySphere::on_addExamButton_clicked()
         // Refresh the highlighted dates
         highlightDatesWithData();
         
-        // Refresh the table if it's for today
-        if (selectedDate == QDate::currentDate()) {
+        // If current date is displayed in the table, refresh it
+        QDate currentDisplayedDate;
+        if (ui.infoTable->rowCount() > 0 && ui.infoTable->item(0, 0)) {
+            currentDisplayedDate = QDate::fromString(ui.infoTable->item(0, 0)->text(), "yyyy-MM-dd");
+        }
+        
+        if (currentDisplayedDate.isValid() && currentDisplayedDate == selectedDate) {
             std::vector<QString> jsonFiles = getJsonFiles(selectedDate.toString("yyyy-MM-dd").toStdString());
+            currentJsonFiles = jsonFiles;
+            
+            // Block signals during update
+            ui.infoTable->blockSignals(true);
             populateTableFromJson(ui.infoTable, jsonFiles);
+            ui.infoTable->blockSignals(false);
         }
     }
 }
@@ -264,10 +363,20 @@ void StudySphere::on_addSubjectButton_clicked()
         // Refresh the highlighted dates
         highlightDatesWithData();
         
-        // Refresh the table if it's for today
-        if (selectedDate == QDate::currentDate()) {
+        // If current date is displayed in the table, refresh it
+        QDate currentDisplayedDate;
+        if (ui.infoTable->rowCount() > 0 && ui.infoTable->item(0, 0)) {
+            currentDisplayedDate = QDate::fromString(ui.infoTable->item(0, 0)->text(), "yyyy-MM-dd");
+        }
+        
+        if (currentDisplayedDate.isValid() && currentDisplayedDate == selectedDate) {
             std::vector<QString> jsonFiles = getJsonFiles(selectedDate.toString("yyyy-MM-dd").toStdString());
+            currentJsonFiles = jsonFiles;
+            
+            // Block signals during update
+            ui.infoTable->blockSignals(true);
             populateTableFromJson(ui.infoTable, jsonFiles);
+            ui.infoTable->blockSignals(false);
         }
     }
 }
@@ -365,12 +474,23 @@ void StudySphere::populateTableFromJson(QTableWidget* tableWidget, const std::ve
         // Handle optional fields
         if (jsonObj.contains("room")) {
             tableWidget->setItem(row, 4, new QTableWidgetItem(jsonObj["room"].toString()));
+        } else {
+            tableWidget->setItem(row, 4, new QTableWidgetItem(""));
         }
+        
         if (jsonObj.contains("isRetake")) {
             tableWidget->setItem(row, 5, new QTableWidgetItem(jsonObj["isRetake"].toString()));
+        } else {
+            tableWidget->setItem(row, 5, new QTableWidgetItem(""));
         }
+        
         if (jsonObj.contains("note")) {
             tableWidget->setItem(row, 6, new QTableWidgetItem(jsonObj["note"].toString()));
+        } else {
+            tableWidget->setItem(row, 6, new QTableWidgetItem(""));
         }
     }
+    
+    // Resize columns to content
+    tableWidget->resizeColumnsToContents();
 }

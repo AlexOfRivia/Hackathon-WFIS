@@ -19,9 +19,13 @@ private:
     void on_addSubjectButton_clicked();
     void on_backFromInfo_clicked();
     void on_calendarWidget_clicked(const QDate& date);
+    void on_tableCellChanged(int row, int column);
     void saveToJson(const std::string& date, const std::string& name, const std::string& startTime, const std::string& endTime, const std::string& note, const std::string& filename);
     void saveToJson(const std::string& date, const std::string& name, const std::string& startTime, const std::string& endTime, const std::string& room, const std::string& isRetake, const std::string& note, const std::string& filename);
+    void updateJsonFromTable(int row);
     std::vector<QString> getJsonFiles(const std::string& date);
     void populateTableFromJson(QTableWidget* tableWidget, const std::vector<QString>& jsonFiles);
     void highlightDatesWithData();
+
+    std::vector<QString> currentJsonFiles;
 };
