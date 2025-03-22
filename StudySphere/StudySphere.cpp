@@ -724,9 +724,16 @@ void StudySphere::on_addSubjectButton_clicked()
 
     QFormLayout formLayout(&dialog);
 
-    QLineEdit *nameEdit = new QLineEdit(&dialog);
+    //QLineEdit *nameEdit = new QLineEdit(&dialog);
+	QComboBox* subjectCB = new QComboBox(&dialog);
     QTimeEdit *startTimeEdit = new QTimeEdit(&dialog);
     QTimeEdit *endTimeEdit = new QTimeEdit(&dialog);
+
+	//Add subjects to the combo box
+	for (int i = 0; i < subjectsVector.size(); i++)
+	{
+		subjectCB->addItem(subjectsVector[i]);
+	}
 
     startTimeEdit->setDisplayFormat("HH:mm");
     endTimeEdit->setDisplayFormat("HH:mm");
@@ -737,7 +744,7 @@ void StudySphere::on_addSubjectButton_clicked()
     QTextEdit *notesEdit = new QTextEdit(&dialog);
     notesEdit->setMaximumHeight(100);
 
-    formLayout.addRow("Subject Name:", nameEdit);
+    formLayout.addRow("Subject:", subjectCB);
     formLayout.addRow("Start Time:", startTimeEdit);
     formLayout.addRow("End Time:", endTimeEdit);
     formLayout.addRow("Notes:", notesEdit);
@@ -750,7 +757,7 @@ void StudySphere::on_addSubjectButton_clicked()
     connect(&buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
 
     if (dialog.exec() == QDialog::Accepted) {
-        QString name = nameEdit->text();
+        QString name = subjectCB->currentText();
         QString notes = notesEdit->toPlainText();
         QTime startTime = startTimeEdit->time();
         QTime endTime = endTimeEdit->time();
