@@ -183,6 +183,7 @@ void StudySphere::populateTableFromJson(QTableWidget* tableWidget, const std::ve
                 }
             }
         }
+        tableWidget->horizontalHeader()->setStretchLastSection(true);
     
         
     }
