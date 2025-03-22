@@ -77,23 +77,15 @@ std::vector<QString> StudySphere::getJsonFiles(const std::string& date)
     QString path = "JsonStronghold/";
 
     #ifdef _WIN32
-    WIN32_FIND_DATA findData;
-    HANDLE hFind = INVALID_HANDLE_VALUE;
+    // Use QDir for Windows too - this avoids character conversion issues
+    QDir dir(path);
+    QStringList entries = dir.entryList(QDir::Files);
     
-    // Use the regular FindFirstFile with multibyte strings instead of FindFirstFileW
-    std::string searchPath = path.toStdString() + "*";
-    hFind = FindFirstFile(searchPath.c_str(), &findData);
-
-    if (hFind != INVALID_HANDLE_VALUE) {
-        do {
-            if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-                std::string filename(findData.cFileName);
-                if (std::regex_match(filename, dateRegex)) {
-                    jsonFiles.push_back(path + QString::fromStdString(filename));
-                }
-            }
-        } while (FindNextFile(hFind, &findData) != 0);
-        FindClose(hFind);
+    for (const QString& filename : entries) {
+        std::string filenameStr = filename.toStdString();
+        if (std::regex_match(filenameStr, dateRegex)) {
+            jsonFiles.push_back(path + filename);
+        }
     }
     #else
     DIR* dir = opendir(path.toStdString().c_str());
@@ -117,7 +109,6 @@ std::vector<QString> StudySphere::getJsonFiles(const std::string& date)
 
     return jsonFiles;
 }
-
 
 void StudySphere::highlightDatesWithData()
 {
