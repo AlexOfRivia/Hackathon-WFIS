@@ -70,7 +70,7 @@ StudySphere::StudySphere(QWidget *parent)
     ui.calendarWidget->setParent(ui.calendarFrame); //setting the calendar widget as a child of the calendar frame
     ui.flashCardFrame->hide(); //hide the flash card frame
 
-    //ui.calendarWidget->setStyleSheet(calendarStyleSheet); //setting the style sheet of the calendar widget
+    ui.calendarWidget->setStyleSheet(calendarStyleSheet); //setting the style sheet of the calendar widget
     
     ui.wrongLabel->setParent(ui.flashCardFrame); //setting the wrong label as a child of the flash card frame)
     ui.rightLabel->setParent(ui.flashCardFrame); //setting the right label as a child of the flash card frame
@@ -546,7 +546,12 @@ std::vector<QString> StudySphere::getJsonFiles(const std::string& date)
 void StudySphere::highlightDatesWithData()
 {
     QTextCharFormat format;
-    format.setBackground(QColor(173, 216, 230)); // Light blue background
+	//making highlight visible despite the stylesheet
+	format.setForeground(QColor(4, 30, 176)); //Blue Text
+	format.setFontWeight(QFont::Bold);
+    //format.setBackground(QColor(173, 216, 230)); // Light blue background
+	format.setFontPointSize(14);
+
     
     // Directory path
     QString path = "JsonStronghold/";

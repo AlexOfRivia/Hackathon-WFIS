@@ -26,106 +26,107 @@
 #include <QJsonArray>
 #include <QJsonValue>
 
-//const QString calendarStyleSheet = R"(
-//QCalendarWidget {
-//    background-color: #2E2E2E;
-//    color: #FFFFFF;
-//    border: 1px solid #444444;
-//    border-radius: 5px;
-//}
-//
-//QCalendarWidget QToolButton {
-//    color: #FFFFFF;
-//    background-color: #444444;
-//    border: none;
-//    width: 70px;
-//    height: 25px;
-//    border-radius: 5px;
-//}
-//
-//QCalendarWidget QToolButton:hover {
-//    background-color: #555555;
-//}
-//
-//QCalendarWidget QToolButton::menu-indicator {
-//    subcontrol-origin: padding;
-//    subcontrol-position: bottom right;
-//    right: 5px;
-//}
-//
-//QCalendarWidget QSpinBox {
-//    color: #FFFFFF;
-//    background: transparent;
-//    border: 1px solid #444444;
-//    width: 50px;
-//    height: 25px;
-//    border-radius: 5px;
-//}
-//
-//QCalendarWidget QSpinBox::up-button {
-//    subcontrol-origin: border;
-//    subcontrol-position: top right;
-//    width: 16px;
-//    border-left: 1px solid #444444;
-//}
-//
-//QCalendarWidget QSpinBox::down-button {
-//    subcontrol-origin: border;
-//    subcontrol-position: bottom right;
-//    width: 16px;
-//    border-left: 1px solid #444444;
-//}
-//
-//QCalendarWidget QSpinBox::up-arrow, QCalendarWidget QSpinBox::down-arrow {
-//    width: 10px;
-//    height: 10px;
-//}
-//
-//QCalendarWidget QAbstractItemView:enabled {
-//    color: #FFFFFF;
-//    background-color: #2E2E2E;
-//    selection-background-color: #555555;
-//    selection-color: #FFFFFF;
-//    border: 1px solid #444444;
-//}
-//
-//QCalendarWidget QAbstractItemView:disabled {
-//    color: #777777;
-//}
-//
-//QCalendarWidget QWidget#qt_calendar_navigationbar {
-//    background-color: #444444;
-//    border-radius: 5px;
-//}
-//
-//QCalendarWidget QTableView {
-//    border-width: 0px;
-//}
-//
-//QCalendarWidget QTableView QTableCornerButton::section {
-//    background-color: #444444;
-//    border: none;
-//}
-//
-//QCalendarWidget QHeaderView::section {
-//    background-color: #444444;
-//    color: #FFFFFF;
-//    border: none;
-//    height: 30px;
-//    border-radius: 5px;
-//}
-//
-//QCalendarWidget QTableView::item {
-//    border: none;
-//    padding: 5px;
-//}
-//
-//QCalendarWidget QTableView::item:selected {
-//    background-color: #555555;
-//    color: #FFFFFF;
-//    border-radius: 5px;
-//}
-//)";
+const QString calendarStyleSheet = R"(
+QCalendarWidget {
+    background-color: #2E2E2E;
+    color: #FFFFFF;
+    border: 1px solid #444444;
+    border-radius: 5px;
+}
+
+QCalendarWidget QToolButton {
+    color: #FFFFFF;
+    background-color: #444444;
+    border: none;
+    width: 70px;
+    height: 25px;
+    border-radius: 5px;
+}
+
+QCalendarWidget QToolButton:hover {
+    background-color: #555555;
+}
+
+
+QCalendarWidget QToolButton::menu-indicator {
+    subcontrol-origin: padding;
+    subcontrol-position: bottom right;
+    right: 5px;
+}
+
+QCalendarWidget QSpinBox {
+    color: #FFFFFF;
+    background: transparent;
+    border: 1px solid #444444;
+    width: 50px;
+    height: 25px;
+    border-radius: 5px;
+}
+
+QCalendarWidget QSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    width: 16px;
+    border-left: 1px solid #444444;
+}
+
+QCalendarWidget QSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    width: 16px;
+    border-left: 1px solid #444444;
+}
+
+QCalendarWidget QSpinBox::up-arrow, QCalendarWidget QSpinBox::down-arrow {
+    width: 10px;
+    height: 10px;
+}
+
+QCalendarWidget QAbstractItemView:enabled {
+    color: #FFFFFF;
+    background-color: #2E2E2E;
+    selection-background-color: #555555;
+    selection-color: #FFFFFF;
+    border: 1px solid #444444;
+}
+
+QCalendarWidget QAbstractItemView:disabled {
+    color: #777777;
+}
+
+QCalendarWidget QWidget#qt_calendar_navigationbar {
+    background-color: #444444;
+    border-radius: 5px;
+}
+
+QCalendarWidget QTableView {
+    border-width: 0px;
+}
+
+QCalendarWidget QTableView QTableCornerButton::section {
+    background-color: #444444;
+    border: none;
+}
+
+QCalendarWidget QHeaderView::section {
+    background-color: #444444;
+    color: #FFFFFF;
+    border: none;
+    height: 30px;
+    border-radius: 5px;
+}
+
+QCalendarWidget QTableView::item {
+    border: none;
+    padding: 5px;
+}
+
+QCalendarWidget QTableView::item:selected {
+    background-color: #555555;
+    color: #FFFFFF;
+    border-radius: 5px;
+}
+)";
 
 
 class StudySphere : public QMainWindow
