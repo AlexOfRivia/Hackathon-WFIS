@@ -372,7 +372,7 @@ QPushButton:Pressed
       <widget class="QPushButton" name="seeFlashCardsButton">
        <property name="geometry">
         <rect>
-         <x>120</x>
+         <x>110</x>
          <y>0</y>
          <width>101</width>
          <height>41</height>
