@@ -34,6 +34,7 @@
 #include <QDir>
 #include <QRegularExpression>
 #include <QTextCharFormat>
+#include <QPushButton>
 
 StudySphere::StudySphere(QWidget *parent)
     : QMainWindow(parent)
@@ -53,7 +54,7 @@ StudySphere::StudySphere(QWidget *parent)
     connect(ui.addExamButton, &QPushButton::clicked, this, &StudySphere::on_addExamButton_clicked);
     connect(ui.calendarWidget, &QCalendarWidget::clicked, this, &StudySphere::on_calendarWidget_clicked);
     connect(ui.infoTable, &QTableWidget::cellChanged, this, &StudySphere::on_tableCellChanged);
-    
+
     // Initialize flashcard functionality
     this->loadFromJSON(); //loading the flash cards from a JSON file
     ui.calendarFrame->setParent(ui.mainScreenFrame); //setting the calendar frame as a child of the central widget 
@@ -116,12 +117,8 @@ StudySphere::StudySphere(QWidget *parent)
 
     // Sample data for testing calendar functionality
     std::vector<QString> jsonFiles = getJsonFiles("2025-03-21");
-    saveToJson("2025-12-01", "Biology", "17:00", "18:00","Focus on histopatology", "JsonStronghold/2025-12-01 Biology.json");
-    saveToJson("2025-12-02", "Math", "13:00", "18:00","A220","No", "Focus on equations", "JsonStronghold/2025-12-02 Math.json");
-    saveToJson("2025-12-03", "Linear Algebry", "17:30", "18:00", "b193", "Yes", "Hard", "JsonStronghold/2025-12-03 Linear Algebry.json");
-    saveToJson("2025-12-04", "C++ programing ", "19:00", "20:00", "Overloading", "JsonStronghold/2025-12-04 C++ programing.json");
     
-    // Populate table with initial data
+        // Populate table with initial data
     populateTableFromJson(ui.infoTable, jsonFiles);
     
     // Highlight dates with data
@@ -771,7 +768,7 @@ void StudySphere::populateTableFromJson(QTableWidget* tableWidget, const std::ve
     tableWidget->setColumnCount(0);
 
     // Determine the columns based on the JSON structure
-    QStringList headers = { "Date", "Name", "Start Time", "End Time", "Room", "Is Retake", "Note" };
+    QStringList headers = { "Delete","Flash Cards","Date", "Name", "Start Time", "End Time", "Room", "Is Retake", "Note"};
     tableWidget->setColumnCount(headers.size());
     tableWidget->setHorizontalHeaderLabels(headers);
 
@@ -798,27 +795,34 @@ void StudySphere::populateTableFromJson(QTableWidget* tableWidget, const std::ve
         int row = tableWidget->rowCount();
         tableWidget->insertRow(row);
 
+        QPushButton* deleteButton = new QPushButton("Del");
+        QPushButton* goToFlashCards = new QPushButton("Study");
+
+        connect(deleteButton, &QPushButton::clicked, this, &StudySphere::on_deleButton);
+
         // Populate the row with data from the JSON object
-        tableWidget->setItem(row, 0, new QTableWidgetItem(jsonObj["date"].toString()));
-        tableWidget->setItem(row, 1, new QTableWidgetItem(jsonObj["name"].toString()));
-        tableWidget->setItem(row, 2, new QTableWidgetItem(jsonObj["startTime"].toString()));
-        tableWidget->setItem(row, 3, new QTableWidgetItem(jsonObj["endTime"].toString()));
+        tableWidget->setCellWidget(row, 0, deleteButton);
+        tableWidget->setCellWidget(row, 1, goToFlashCards);
+        tableWidget->setItem(row, 2, new QTableWidgetItem(jsonObj["date"].toString()));
+        tableWidget->setItem(row, 3, new QTableWidgetItem(jsonObj["name"].toString()));
+        tableWidget->setItem(row, 4, new QTableWidgetItem(jsonObj["startTime"].toString()));
+        tableWidget->setItem(row, 5, new QTableWidgetItem(jsonObj["endTime"].toString()));
         
         int SubjectCaunt = 0;
 
         // Handle optional fields
         if (jsonObj.contains("room")) {
-            tableWidget->setItem(row, 4, new QTableWidgetItem(jsonObj["room"].toString()));
+            tableWidget->setItem(row, 6, new QTableWidgetItem(jsonObj["room"].toString()));
             SubjectCaunt--;
         }
         
         if (jsonObj.contains("isRetake")) {
-            tableWidget->setItem(row, 5, new QTableWidgetItem(jsonObj["isRetake"].toString()));
+            tableWidget->setItem(row, 7, new QTableWidgetItem(jsonObj["isRetake"].toString()));
             SubjectCaunt--;
         }
         
         if (jsonObj.contains("note")) {
-            tableWidget->setItem(row, 6, new QTableWidgetItem(jsonObj["note"].toString()));
+            tableWidget->setItem(row, 8, new QTableWidgetItem(jsonObj["note"].toString()));
         }
         if (SubjectCaunt==-2) {
             QColor backgroundColor("#22092C"); 
@@ -844,4 +848,9 @@ void StudySphere::populateTableFromJson(QTableWidget* tableWidget, const std::ve
         }
         tableWidget->horizontalHeader()->setStretchLastSection(true);
     }
+}
+
+void StudySphere::on_deleButton(QPushButton* deleteButton)
+{
+    std::cout << deleteButton.currentRow;
 }

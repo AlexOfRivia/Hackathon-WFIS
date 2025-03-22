@@ -64,6 +64,7 @@ private:
     std::vector<QString> getJsonFiles(const std::string& date);
     void populateTableFromJson(QTableWidget* tableWidget, const std::vector<QString>& jsonFiles);
     void highlightDatesWithData();
+    void on_deleButton(QPushButton* deleteButton);
     std::vector<QString> currentJsonFiles;
     
     // Flashcard functionality members
