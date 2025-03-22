@@ -576,6 +576,46 @@ QPushButton:Pressed
        <string>Show Answer</string>
       </property>
      </widget>
+     <widget class="QLabel" name="wrongLabel">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>500</y>
+        <width>81</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Tahoma</family>
+        <pointsize>20</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#cbc5c5;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="rightLabel">
+      <property name="geometry">
+       <rect>
+        <x>620</x>
+        <y>500</y>
+        <width>81</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Tahoma</family>
+        <pointsize>20</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#cbc5c5;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QFrame" name="calendarFrame">
      <property name="geometry">
@@ -814,8 +854,8 @@ QPushButton:Pressed
     <zorder>calendarButton</zorder>
     <zorder>flashCardsButton</zorder>
     <zorder>mainTitle</zorder>
-    <zorder>flashCardFrame</zorder>
     <zorder>calendarFrame</zorder>
+    <zorder>flashCardFrame</zorder>
    </widget>
   </widget>
  </widget>

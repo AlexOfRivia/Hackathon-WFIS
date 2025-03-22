@@ -65,6 +65,9 @@ private:
     void populateTableFromJson(QTableWidget* tableWidget, const std::vector<QString>& jsonFiles);
     void highlightDatesWithData();
     void on_deleButton(QPushButton* deleteButton);
+    void deleteTableRow(int row);
+    bool hasEntriesForDate(const QString& dateStr);
+    void updateJsonFromTableRow(int row);
     std::vector<QString> currentJsonFiles;
     
     // Flashcard functionality members
@@ -72,4 +75,6 @@ private:
     std::vector<flashCard> flashCardsVector;
     std::vector<flashCard> temporaryFlashCards; //For sorting by subject
     int index = 0;
+    int rightQuestions = 0;
+    int wrongQuestions = 0;
 };
