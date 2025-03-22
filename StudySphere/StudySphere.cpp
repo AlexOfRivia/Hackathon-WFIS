@@ -1,3 +1,11 @@
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#endif
+
 #include "StudySphere.h"
 #include <QInputDialog>
 #include <QMessageBox>
@@ -11,8 +19,85 @@
 #include <QDialogButtonBox>
 #include <QTimeEdit>
 #include <QCheckBox>
+#include <string>
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <regex>
+
+/* void StudySphere::on_calendarWidget_clicked(const QDate& date)
+{
+    ui.calendarFrame->hide();
+    ui.infoFrame->show();
+
+    std::string filePath = "JsonStronghold/" + date.toString("yyyy-MM-dd").toStdString();
+    std::ifstream file(filePath);
+    if (file.is_open()) {
+        std::string line;
+        std::string content;
+        while (std::getline(file, line)) {
+            content += line;
+        }
+        file.close();
+        std::cout << "Strings read from " << filePath << std::endl;
+        std::cout << content << std::endl;
+    }
+    else {
+        std::cerr << "Failed to open file: " << filePath << std::endl;
+    }
+} */
+
+
+
+std::vector<std::string> StudySphere::getJsonFiles(const std::string& date)
+{
+    std::vector<std::string> jsonFiles;
+    std::regex dateRegex(date + ".*");
+    std::string path = "JsonStronghold/";
+
+    #ifdef _WIN32
+
+    WIN32_FIND_DATA findData;
+    HANDLE hFind = INVALID_HANDLE_VALUE;
+    std::string searchPath = path + "*";
+
+    hFind = FindFirstFile(searchPath.c_str(), &findData);
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+                std::string filename(findData.cFileName);
+                if (std::regex_match(filename, dateRegex)) {
+                    jsonFiles.push_back(path + filename);
+                }
+            }
+        } while (FindNextFile(hFind, &findData) != 0);
+        FindClose(hFind);
+    }
+    #else
+
+    DIR* dir = opendir(path.c_str());
+    if (dir != nullptr) {
+        struct dirent* entry;
+        while ((entry = readdir(dir)) != nullptr) {
+            std::string filename(entry->d_name);
+
+            if (filename != "." && filename != "..") {
+
+                struct stat statbuf;
+                std::string fullPath = path + filename;
+                if (stat(fullPath.c_str(), &statbuf) == 0 && 
+                    S_ISREG(statbuf.st_mode) && 
+                    std::regex_match(filename, dateRegex)) {
+                    jsonFiles.push_back(fullPath);
+                }
+            }
+        }
+        closedir(dir);
+    }
+    #endif
+
+    return jsonFiles;
+}
 
 StudySphere::StudySphere(QWidget *parent)
     : QMainWindow(parent)
@@ -21,8 +106,9 @@ StudySphere::StudySphere(QWidget *parent)
     ui.calendarFrame->hide();
 
     connect(ui.backFromInfo, &QPushButton::clicked, this, &StudySphere::on_backFromInfo_clicked);
-    saveToJson("2025-12-01", "Biology", "17:00", "18:00","Focus on histopatology", "JsonStronghold/output1.json");
-    saveToJson("2025-12-01", "Biology", "17:00", "18:00","A220","No", "Focus on histopatology", "JsonStronghold/output2.json");
+
+    std::vector<std::string> jsonFiles = getJsonFiles("2025-03-21");
+
 }
 
 StudySphere::~StudySphere()
@@ -74,12 +160,9 @@ void StudySphere::on_addExamButton_clicked()
         QString room = roomEdit->text();
         QString isRetake = isRetakeEdit->text();
 
-        if (!name.isEmpty()) {
-            QTextCharFormat format;
-            format.setBackground(Qt::cyan);
-            format.setFontWeight(QFont::Bold);
-            ui.calendarWidget->setDateTextFormat(selectedDate, format);
-        } 
+        std::string filePath = "JsonStronghold/" + selectedDate.toString("yyyy-MM-dd").toStdString() +  name.toStdString();
+        saveToJson(selectedDate.toString("yyyy-MM-dd").toStdString(), name.toStdString(), startTime.toString("HH:mm").toStdString(), endTime.toString("HH:mm").toStdString(), room.toStdString(), isRetake.toStdString(), notes.toStdString(), filePath);
+
     }
 }
 
@@ -123,13 +206,9 @@ void StudySphere::on_addSubjectButton_clicked()
         QTime startTime = startTimeEdit->time();
         QTime endTime = endTimeEdit->time();
 
-        if (!name.isEmpty()) {
-            QTextCharFormat format;
-            format.setBackground(Qt::cyan);
-            format.setFontWeight(QFont::Bold);
-            ui.calendarWidget->setDateTextFormat(selectedDate, format);
 
-        }
+        std::string filePath = "JsonStronghold/" + selectedDate.toString("yyyy-MM-dd").toStdString() + " " +  name.toStdString();
+        saveToJson(selectedDate.toString("yyyy-MM-dd").toStdString(), name.toStdString(), startTime.toString("HH:mm").toStdString(), endTime.toString("HH:mm").toStdString(), notes.toStdString(), filePath);
     }
 }
 
