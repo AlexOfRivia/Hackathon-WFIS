@@ -9,6 +9,7 @@ StudySphere::StudySphere(QWidget *parent)
 	ui.flashCard->setParent(ui.flashCardFrame); //setting the flash card as a child of the flash card frame
 	ui.didntGetIt->setParent(ui.flashCardFrame); //setting the didnt get it button as a child of the flash card frame
 	ui.gotIt->setParent(ui.flashCardFrame); //setting the got it button as a child of the flash card frame
+	ui.seeFlashCardsButton->setParent(ui.flashCardFrame); //setting the see flash cards button as a child of the central widget
 	ui.flashCard->hide(); //hide the flash card
 	ui.didntGetIt->hide(); //hide the didnt get it button
 	ui.gotIt->hide(); //hide the got it button
@@ -42,6 +43,9 @@ StudySphere::StudySphere(QWidget *parent)
 		ui.studyButton, &QPushButton::clicked, this, &StudySphere::study //connecting the study button to the study function
 	);
 	
+	QObject::connect(
+		ui.seeFlashCardsButton, &QPushButton::clicked, this, &StudySphere::seeFlashCards //connecting the see flash cards button to the seeFlashCards function
+	);
 
 	QObject::connect(
 		ui.calendarButton, &QPushButton::clicked, this, &StudySphere::showCalendar //connecting the calendar button to the showCalendar function
@@ -101,6 +105,44 @@ void StudySphere::addFlashCard()
 			flashCardsVector.push_back(newFlashCard); //Adding the flash card to the vector
 		}
 	}
+}
+
+//Function to see the flash cards
+void StudySphere::seeFlashCards()
+{
+	if (flashCardsVector.empty())
+	{
+		QMessageBox::warning(this, "Error", "You have no flash cards added.");
+		return;
+	}
+	else {
+
+		//checkbox, question, answer, subject - delete checked ones
+		QDialog dialog(this); //Creating a dialog box
+		dialog.setWindowTitle("Flash Cards"); //Setting the title of the dialog box
+
+		QVBoxLayout layout(&dialog); //Creating a layout for the dialog
+		QVBoxLayout flashCardLayout; //Creating a layout for the flash cards
+		for (int i = 0; i < flashCardsVector.size(); i++) //Looping through the flash cards vector
+		{
+			QHBoxLayout* flashCardRow = new QHBoxLayout(); //Creating a row for the flash card
+			QCheckBox* checkBox = new QCheckBox(&dialog); //Creating a check box
+			QLabel* questionLabel = new QLabel(QString::fromStdString(flashCardsVector[i].getQuestion()), &dialog); //Creating a label for the question
+			QLabel* answerLabel = new QLabel(QString::fromStdString(flashCardsVector[i].getAnswer()), &dialog); //Creating a label for the answer
+			QLabel* subjectLabel = new QLabel(QString::fromStdString(flashCardsVector[i].getSubject()), &dialog); //Creating a label for the subject
+			flashCardRow->addWidget(checkBox); //Adding the check box to the row
+			flashCardRow->addWidget(questionLabel); //Adding the question label to the row
+			flashCardRow->addWidget(answerLabel); //Adding the answer label to the row
+			flashCardRow->addWidget(subjectLabel); //Adding the subject label to the row
+			flashCardLayout.addLayout(flashCardRow); //Adding the row to the layout
+		}
+		layout.addLayout(&flashCardLayout); //Adding the flash card layout to the main layout
+		layout.addWidget(new QPushButton("Delete Checked", &dialog)); //Adding a delete checked button to the layout
+		dialog.exec(); //Executing the dialog
+		
+
+	}
+
 }
 
 //Function to study the flash cards

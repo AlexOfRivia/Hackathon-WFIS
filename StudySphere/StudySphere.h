@@ -9,6 +9,7 @@
 #include <QString>
 #include <QMessageBox>
 #include <QVBoxLayout>
+#include <QCheckBox>
 #include <QComboBox>
 #include <QPushButton>
 #include <QLabel>
@@ -43,6 +44,7 @@ public:
 	void study(); //Function to study the flash cards
 	void saveToJSON(); //Function to save the flash cards to a JSON file
 	void loadFromJSON(); //Function to load the flash cards from a JSON file
+	void seeFlashCards(); //Function to see the flash cards
 	void didGetIt(bool wasRight); //Function to show the answer of the flash card
 
 private:

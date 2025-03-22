@@ -334,7 +334,7 @@ QPushButton:Pressed
       <widget class="QPushButton" name="studyButton">
        <property name="geometry">
         <rect>
-         <x>190</x>
+         <x>220</x>
          <y>0</y>
          <width>101</width>
          <height>41</height>
@@ -367,6 +367,44 @@ QPushButton:Pressed
        </property>
        <property name="text">
         <string>Study!</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="seeFlashCardsButton">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>0</y>
+         <width>101</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	font: 700 10pt &quot;Cambria Math&quot;;
+	color: rgba(200,200,200,225);
+	background-color: rgba(4,30,176,255);		
+	border-radius: 15px;
+	border-style: outset;
+    border-width: 2px;
+    border-color: rgba(4,30,80,255);	
+}
+QPushButton:Hover
+{
+	background-color: rgba(4,30,146,255);	
+	border: inset;
+}
+QPushButton:Pressed
+{
+	background-color: rgba(4,30,120,255);	
+	border: inset;
+}
+
+
+
+</string>
+       </property>
+       <property name="text">
+        <string>See flash cards</string>
        </property>
       </widget>
      </widget>
@@ -706,6 +744,8 @@ QPushButton:Pressed
        </property>
       </widget>
      </widget>
+     <zorder>calendarFrame</zorder>
+     <zorder>frame_2</zorder>
     </widget>
     <zorder>flashCardsButton</zorder>
     <zorder>calendarButton</zorder>
