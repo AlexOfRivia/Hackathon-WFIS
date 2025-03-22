@@ -204,9 +204,19 @@ void StudySphere::addNewSubject()
 
 	QObject::connect(okButton, &QPushButton::clicked, &dialog, &QDialog::accept); // Connecting the OK button to accept the dialog
 
-	if (dialog.exec() == QDialog::Accepted) { // Executing the dialog and checking if it was accepted
-		this->subjectsVector.push_back(lineEdit.text()); // Adding the subject to the vector
-		ui.subjectsComboBox->addItem(lineEdit.text()); // Adding the subject to the combo box
+	
+
+	if (dialog.exec() == QDialog::Accepted) { //Executing the dialog and checking if it was accepted
+		QString newSubject = lineEdit.text();
+
+		//Check if the subject already exists
+		if (std::find(subjectsVector.begin(), subjectsVector.end(), newSubject) != subjectsVector.end()) {
+			QMessageBox::warning(this, "Error", "Subject already exists.");
+			return;
+		}
+
+		this->subjectsVector.push_back(newSubject); //Adding the subject to the vector
+		ui.subjectsComboBox->addItem(newSubject); //Adding the subject to the combo box
 	}
 }
 
