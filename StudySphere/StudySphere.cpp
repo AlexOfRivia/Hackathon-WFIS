@@ -79,6 +79,8 @@ std::vector<QString> StudySphere::getJsonFiles(const std::string& date)
     #ifdef _WIN32
     WIN32_FIND_DATA findData;
     HANDLE hFind = INVALID_HANDLE_VALUE;
+    
+    // Use the regular FindFirstFile with multibyte strings instead of FindFirstFileW
     std::string searchPath = path.toStdString() + "*";
     hFind = FindFirstFile(searchPath.c_str(), &findData);
 
@@ -115,6 +117,7 @@ std::vector<QString> StudySphere::getJsonFiles(const std::string& date)
 
     return jsonFiles;
 }
+
 
 void StudySphere::highlightDatesWithData()
 {
