@@ -155,6 +155,7 @@ void StudySphere::addFlashCard()
             comboBox.addItem(subjectsVector[i]); //Adding the subjects to the combo box
         }
 
+		comboBox.setCurrentIndex(ui.subjectsComboBox->currentIndex()); //Setting the current index of the combo box to the subjectComboBox
         layout.addWidget(&comboBox); //Adding the line edit to the layout
         layout.addWidget(new QLabel("Question: ", &dialog));
         layout.addWidget(&questionLineEdit); //Adding the line edit to the layout
@@ -176,6 +177,7 @@ void StudySphere::addFlashCard()
 }
 
 //Function to see the flash cards
+// Function to see the flash cards
 void StudySphere::seeFlashCards()
 {
     if (flashCardsVector.empty())
@@ -184,30 +186,63 @@ void StudySphere::seeFlashCards()
         return;
     }
     else {
-        //checkbox, question, answer, subject - delete checked ones
-        QDialog dialog(this); //Creating a dialog box
-        dialog.setWindowTitle("Flash Cards"); //Setting the title of the dialog box
-
-        QVBoxLayout layout(&dialog); //Creating a layout for the dialog
-        QVBoxLayout flashCardLayout; //Creating a layout for the flash cards
-        for (int i = 0; i < flashCardsVector.size(); i++) //Looping through the flash cards vector
+        // checkbox, question, answer, subject
+        // Clicking the delete button will delete those flash cards where the checkbox is signed
+        QDialog dialog(this); // Creating a dialog box
+        dialog.setWindowTitle("Flash Cards"); // Setting the title of the dialog box
+        QVBoxLayout layout(&dialog); // Creating a layout for the dialog
+        QTableWidget tableWidget(&dialog); // Creating a table widget
+        tableWidget.setColumnCount(4); // Setting the column count of the table
+        tableWidget.setHorizontalHeaderLabels({ "Select", "Question", "Answer", "Subject" }); // Setting the horizontal header labels of the table
+        tableWidget.setEditTriggers(QAbstractItemView::NoEditTriggers); // Setting the edit triggers of the table
+        tableWidget.setSelectionBehavior(QAbstractItemView::SelectRows); // Setting the selection behavior of the table
+        tableWidget.setSelectionMode(QAbstractItemView::SingleSelection); // Setting the selection mode of the table
+        for (int i = 0; i < flashCardsVector.size(); i++) // Looping through the flash cards vector
         {
-            QHBoxLayout* flashCardRow = new QHBoxLayout(); //Creating a row for the flash card
-            QCheckBox* checkBox = new QCheckBox(&dialog); //Creating a check box
-            QLabel* questionLabel = new QLabel(QString::fromStdString(flashCardsVector[i].getQuestion()), &dialog); //Creating a label for the question
-            QLabel* answerLabel = new QLabel(QString::fromStdString(flashCardsVector[i].getAnswer()), &dialog); //Creating a label for the answer
-            QLabel* subjectLabel = new QLabel(QString::fromStdString(flashCardsVector[i].getSubject()), &dialog); //Creating a label for the subject
-            flashCardRow->addWidget(checkBox); //Adding the check box to the row
-            flashCardRow->addWidget(questionLabel); //Adding the question label to the row
-            flashCardRow->addWidget(answerLabel); //Adding the answer label to the row
-            flashCardRow->addWidget(subjectLabel); //Adding the subject label to the row
-            flashCardLayout.addLayout(flashCardRow); //Adding the row to the layout
+            tableWidget.insertRow(tableWidget.rowCount()); // Inserting a row in the table
+            QTableWidgetItem* checkBoxItem = new QTableWidgetItem(); // Creating a new table widget item for the checkbox
+            checkBoxItem->setCheckState(Qt::Unchecked); // Setting the checkbox state to unchecked
+            tableWidget.setItem(tableWidget.rowCount() - 1, 0, checkBoxItem); // Adding the checkbox to the table
+            tableWidget.setItem(tableWidget.rowCount() - 1, 1, new QTableWidgetItem(QString::fromStdString(flashCardsVector[i].getQuestion()))); // Adding the question of the flash card to the table
+            tableWidget.setItem(tableWidget.rowCount() - 1, 2, new QTableWidgetItem(QString::fromStdString(flashCardsVector[i].getAnswer()))); // Adding the answer of the flash card to the table
+            tableWidget.setItem(tableWidget.rowCount() - 1, 3, new QTableWidgetItem(QString::fromStdString(flashCardsVector[i].getSubject()))); // Adding the subject of the flash card to the table
         }
-        layout.addLayout(&flashCardLayout); //Adding the flash card layout to the main layout
-        layout.addWidget(new QPushButton("Delete Checked", &dialog)); //Adding a delete checked button to the layout
-        dialog.exec(); //Executing the dialog
+        layout.addWidget(&tableWidget); // Adding the table widget to the layout
+        QDialogButtonBox buttonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, &dialog); // Creating a button box
+        layout.addWidget(&buttonBox); // Adding the button box to the layout
+        QObject::connect(&buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept); // Connecting the button box to accept the dialog
+        QObject::connect(&buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject); // Connecting the button box to reject the dialog
+        if (dialog.exec() == QDialog::Accepted) // Executing the dialog and checking if it was accepted
+        {
+            std::vector<int> indicesToDelete;
+            for (int i = 0; i < tableWidget.rowCount(); i++)
+            {
+                if (tableWidget.item(i, 0)->checkState() == Qt::Checked)
+                {
+                    indicesToDelete.push_back(i);
+                }
+            }
+            // Erase the flash cards from the vector in reverse order to avoid invalidating indices
+            for (int i = indicesToDelete.size() - 1; i >= 0; i--)
+            {
+                flashCardsVector.erase(flashCardsVector.begin() + indicesToDelete[i]);
+				//checking if the deleted flash card matches the current dubject to remove it from the temporary flash cards vector
+				if (temporaryFlashCards.size() > 0 && temporaryFlashCards[index].getQuestion() == tableWidget.item(indicesToDelete[i], 1)->text().toStdString())
+				{
+					temporaryFlashCards.erase(temporaryFlashCards.begin() + index);
+				}
+				
+            }
+            // hiding the flash card
+            ui.flashCard->hide();
+            ui.didntGetIt->hide();
+            ui.gotIt->hide();
+            ui.showAnswerButton->hide();
+        }
     }
 }
+
+
 
 //Function to study the flash cards
 void StudySphere::study()
@@ -216,47 +251,61 @@ void StudySphere::study()
     {
         QMessageBox::warning(this, "Error", "You have no flash cards added.");
         return;
-    } else {
-        ui.flashCard->show(); //show the flash card
-        ui.didntGetIt->show(); //show the didnt get it button
-        ui.gotIt->show(); //show the got it button
-        ui.showAnswerButton->show(); //show the show answer button
-
-        //Clear the temporary flash cards vector
-        temporaryFlashCards.clear();
-
-        //Populate the temporary flash cards vector based on the selected subject
-        for (int i = 0; i < flashCardsVector.size(); i++) //Looping through the flash cards vector
-        {
-            if (flashCardsVector[i].getSubject() == ui.subjectsComboBox->currentText().toStdString()) //Checking if the subject of the flash card is equal to the subject in the combo box
-            {
-                temporaryFlashCards.push_back(flashCardsVector[i]); //Adding the flash cards to the temporary flash cards vector
-            }
-        }
-
-        //Check if there are any flash cards for the selected subject
-        if (temporaryFlashCards.empty())
-        {
-            QMessageBox::warning(this, "Error", "No flash cards found for the selected subject.");
-            return;
-        }
-
-        // Reset the index
-        this->index = 0;
-
-        //Set the alignment of the label to center
-        ui.qaLabel->setAlignment(Qt::AlignCenter);
-        // Set the question of the first flash card in the temporary vector to the label
-        ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getQuestion())); //Setting the question of the flash card to the label
     }
+
+    // Show the flash card UI elements
+    ui.flashCard->show();
+    ui.didntGetIt->show();
+    ui.gotIt->show();
+    ui.showAnswerButton->show();
+
+    // Clear the temporary flash cards vector
+    temporaryFlashCards.clear();
+
+    // Populate the temporary flash cards vector based on the selected subject
+    std::string selectedSubject = ui.subjectsComboBox->currentText().toStdString();
+    for (const auto& flashCardObj : flashCardsVector)
+    {
+        if (flashCardObj.getSubject() == selectedSubject)
+        {
+            temporaryFlashCards.push_back(flashCardObj);
+        }
+    }
+
+    // Check if there are any flash cards for the selected subject
+    if (temporaryFlashCards.empty())
+    {
+        QMessageBox::warning(this, "Error", "No flash cards found for the selected subject.");
+        ui.flashCard->hide();
+        ui.didntGetIt->hide();
+        ui.gotIt->hide();
+        ui.showAnswerButton->hide();
+        return;
+    }
+
+    // Reset the index
+    this->index = 0;
+
+    // Set the alignment of the label to center
+    ui.qaLabel->setAlignment(Qt::AlignCenter);
+
+    // Set the question of the first flash card in the temporary vector to the label
+    ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getQuestion()));
 }
+
 
 //Function to show the answer of the flash card
 void StudySphere::showAnswer()
 {
-    //Set the alignment of the label to center
-    ui.qaLabel->setAlignment(Qt::AlignCenter);
-    ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getAnswer()));  //Setting the answer of the flash card to the label
+    if (temporaryFlashCards.empty()) {
+        QMessageBox::warning(this, "Error", "No flash cards available.");
+        return;
+    }
+    else {
+		//Set the alignment of the label to center
+		ui.qaLabel->setAlignment(Qt::AlignCenter);
+		ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getAnswer())); //Setting the answer of the flash card to the label
+    }
 }
 
 //Saving to JSON file
@@ -345,6 +394,11 @@ void StudySphere::loadFromJSON()
 //Function for checking if got it wrong or right
 void StudySphere::didGetIt(bool wasRight)
 {
+    if (temporaryFlashCards.empty()) {
+        QMessageBox::warning(this, "Error", "No flash cards available.");
+        return;
+    }
+
     this->index++; // Incrementing the index
     if (index >= temporaryFlashCards.size())
     {

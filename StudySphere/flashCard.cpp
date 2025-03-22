@@ -2,17 +2,17 @@
 
 
 //Function to get the subject of the flashcard (for showing flash cards from certain subject)
-std::string flashCard::getSubject()
+std::string flashCard::getSubject() const
 {
 	return this->subject;
 }
 
-std::string flashCard::getQuestion()
+std::string flashCard::getQuestion() const
 {
 	return this->question;
 }
 
-std::string flashCard::getAnswer()
+std::string flashCard::getAnswer() const
 {
 	return this->answer;
 }

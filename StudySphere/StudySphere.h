@@ -5,6 +5,7 @@
 #include <string>
 #include <QString>
 #include <vector>
+#include <algorithm>
 #include <QCalendarWidget>
 #include <QTableWidget>
 #include "flashCard.h" //Include flashCard class
