@@ -72,4 +72,5 @@ private:
     std::vector<flashCard> flashCardsVector;
     std::vector<flashCard> temporaryFlashCards; //For sorting by subject
     int index = 0;
+	int wrongQuestions, rightQuestions=0;
 };

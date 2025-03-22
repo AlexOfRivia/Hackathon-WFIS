@@ -61,6 +61,10 @@ StudySphere::StudySphere(QWidget *parent)
     ui.didntGetIt->setParent(ui.flashCardFrame); //setting the didnt get it button as a child of the flash card frame
     ui.gotIt->setParent(ui.flashCardFrame); //setting the got it button as a child of the flash card frame
     ui.seeFlashCardsButton->setParent(ui.flashCardFrame); //setting the see flash cards button as a child of the central widget
+	ui.wrongLabel->setParent(ui.flashCardFrame); //setting the wrong label as a child of the flash card frame)
+	ui.rightLabel->setParent(ui.flashCardFrame); //setting the right label as a child of the flash card frame
+	ui.wrongLabel->hide(); //hide the wrong label
+	ui.rightLabel->hide(); //hide the right label
     ui.flashCard->hide(); //hide the flash card
     ui.didntGetIt->hide(); //hide the didnt get it button
     ui.gotIt->hide(); //hide the got it button
@@ -68,6 +72,12 @@ StudySphere::StudySphere(QWidget *parent)
     ui.showAnswerButton->setParent(ui.flashCardFrame); //setting the show answer button as a child of the flash card frame
     ui.calendarWidget->setParent(ui.calendarFrame); //setting the calendar widget as a child of the calendar frame
     ui.flashCardFrame->hide(); //hide the flash card frame
+
+	ui.wrongLabel->setAlignment(Qt::AlignCenter); //set the alignment of the wrong label to center
+	ui.rightLabel->setAlignment(Qt::AlignCenter); //set the alignment of the right label to center
+
+	ui.wrongLabel->setStyleSheet("QLabel { color : #cbc5c5; }"); 
+    ui.rightLabel->setStyleSheet("QLabel { color : #cbc5c5; }");
 
     // Connect signals and slots for flashcard functionality
     QObject::connect(
@@ -244,6 +254,8 @@ void StudySphere::seeFlashCards()
             ui.didntGetIt->hide();
             ui.gotIt->hide();
             ui.showAnswerButton->hide();
+            ui.wrongLabel->hide(); //hide the wrong label
+            ui.rightLabel->hide(); //hide the right label
         }
     }
 }
@@ -259,11 +271,18 @@ void StudySphere::study()
         return;
     }
 
+    this->wrongQuestions = 0;
+	this->rightQuestions = 0;
+    ui.wrongLabel->setText(QString::number(wrongQuestions)); 
+	ui.rightLabel->setText(QString::number(rightQuestions)); 
+
     // Show the flash card UI elements
     ui.flashCard->show();
     ui.didntGetIt->show();
     ui.gotIt->show();
     ui.showAnswerButton->show();
+    ui.wrongLabel->show(); 
+    ui.rightLabel->show(); 
 
     // Clear the temporary flash cards vector
     temporaryFlashCards.clear();
@@ -286,6 +305,8 @@ void StudySphere::study()
         ui.didntGetIt->hide();
         ui.gotIt->hide();
         ui.showAnswerButton->hide();
+        ui.wrongLabel->hide(); //hide the wrong label
+        ui.rightLabel->hide(); //hide the right label
         return;
     }
 
@@ -414,6 +435,18 @@ void StudySphere::didGetIt(bool wasRight)
     //Set the alignment of the label to center
     ui.qaLabel->setAlignment(Qt::AlignCenter);
     ui.qaLabel->setText(QString::fromStdString(temporaryFlashCards[index].getQuestion())); // Setting the question of the flash card to the label
+
+	switch (wasRight)
+	{
+	case true:
+		this->rightQuestions += 1; //increment the right questions
+		ui.rightLabel->setText(QString::number(rightQuestions)); //show the right label
+		break;
+	case false:
+		this->wrongQuestions += 1; //increment the wrong questions
+        ui.wrongLabel->setText(QString::number(wrongQuestions)); //hide the right label
+		break;
+	}
 }
 
 //Function to show the calendar
