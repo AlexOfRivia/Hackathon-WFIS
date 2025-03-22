@@ -171,6 +171,7 @@ private:
     void deleteTableRow(int row);
     bool hasEntriesForDate(const QString& dateStr);
     void updateJsonFromTableRow(int row);
+    void showColorPicker();
     std::vector<QString> currentJsonFiles;
     
     // Flashcard functionality members

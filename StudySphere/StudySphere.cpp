@@ -35,6 +35,7 @@
 #include <QRegularExpression>
 #include <QTextCharFormat>
 #include <QPushButton>
+#include <QColorDialog>
 
 StudySphere::StudySphere(QWidget *parent)
     : QMainWindow(parent)
@@ -146,6 +147,16 @@ StudySphere::StudySphere(QWidget *parent)
 StudySphere::~StudySphere()
 {
     this->saveToJSON(); //Saving the flash cards to a JSON file
+}
+
+//Showing the color picker
+void StudySphere::showColorPicker()
+{
+    QColor color = QColorDialog::getColor(Qt::white, this, "Select Color");
+    if (color.isValid()) {
+        // Do something with the selected color
+        qDebug() << "Selected color:" << color.name();
+    }
 }
 
 //Function to add a flash card
@@ -550,9 +561,8 @@ void StudySphere::highlightDatesWithData()
     format.setForeground(QColor("#A1D6B2")); //Blue Text
 	format.setFontWeight(QFont::Bold);
     //format.setBackground(QColor(173, 216, 230)); // Light blue background
-	format.setFontPointSize(14);
+	format.setFontPointSize(15);
 
-    
     // Directory path
     QString path = "JsonStronghold/";
     QDir dir(path);
@@ -607,10 +617,6 @@ void StudySphere::on_calendarWidget_clicked(const QDate& date)
         
         // Show the info frame
         ui.infoFrame->show();
-    } else {
-        // Show a message that there's no data for this date
-        QMessageBox::information(this, "No Records", 
-            "No records found for " + date.toString("yyyy-MM-dd"));
     }
 }
 
