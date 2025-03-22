@@ -4,6 +4,7 @@ StudySphere::StudySphere(QWidget *parent)
     : QMainWindow(parent)
 {
 	ui.setupUi(this); //setting up the UI
+	this->loadFromJSON(); //loading the flash cards from a JSON file
     //setting the calendar frame as hidden
 	ui.calendarFrame->setParent(ui.mainScreenFrame); //setting the calendar frame as a child of the central widget 
 	ui.flashCard->setParent(ui.flashCardFrame); //setting the flash card as a child of the flash card frame
@@ -234,36 +235,48 @@ void StudySphere::saveToJSON()
 //Loading from JSON file
 void StudySphere::loadFromJSON()
 {
-	//Creating a file object
+	// Creating a file object
 	QFile file("flashCards.json");
-	//Opening the file in read mode
-	file.open(QIODevice::ReadOnly);
-	//Creating a JSON document
-	QJsonDocument jsonDocument = QJsonDocument::fromJson(file.readAll());
-	//Closing the file
-	file.close();
-	//Creating a JSON object
-	QJsonObject jsonObject = jsonDocument.object();
-	//Creating a JSON array
-	QJsonArray jsonArray = jsonObject["flashCards"].toArray();
-	//Clearing the flash cards vector
-	flashCardsVector.clear();
-	//Looping through the JSON array
-	for (int i = 0; i < jsonArray.size(); i++)
+	// Opening the file in read mode
+	if (!file.open(QIODevice::ReadOnly))
 	{
-		//Creating a JSON object
-		QJsonObject flashCardObject = jsonArray[i].toObject();
-		//Creating a flash card object
+		// Handle file open error
+		QMessageBox::warning(this, "Error", "Unable to open file for reading.");
+		return;
+	}
+	// Creating a JSON document
+	QJsonDocument jsonDocument = QJsonDocument::fromJson(file.readAll());
+	// Closing the file
+	file.close();
+	// Creating a JSON object
+	QJsonObject jsonObject = jsonDocument.object();
+	// Creating a JSON array
+	QJsonArray jsonArray = jsonObject["flashCards"].toArray();
+	// Clearing the flash cards vector
+	flashCardsVector.clear();
+	// Clearing the subjects vector to avoid duplicates
+	subjectsVector.clear();
+	// Looping through the JSON array
+	for (const auto& flashCardValue : jsonArray)
+	{
+		QJsonObject flashCardObject = flashCardValue.toObject();
 		flashCard newFlashCard;
-		//Setting the subject of the flash card
 		newFlashCard.setSubject(flashCardObject["subject"].toString().toStdString());
-		//this->subjectsVector.push_back(QString::fromStdString(flashCardsVector[i].getSubject()));
-		//Setting the question of the flash card
 		newFlashCard.setQuestion(flashCardObject["question"].toString().toStdString());
-		//Setting the answer of the flash card
 		newFlashCard.setAnswer(flashCardObject["answer"].toString().toStdString());
-		//Adding the flash card to the flash cards vector
+		// Adding the flash card to the flash cards vector
 		flashCardsVector.push_back(newFlashCard);
+		// Adding the subject to the subjects vector if not already present
+		QString subject = QString::fromStdString(newFlashCard.getSubject());
+		if (std::find(subjectsVector.begin(), subjectsVector.end(), subject) == subjectsVector.end())
+		{
+			subjectsVector.push_back(subject);
+		}
+	}
+	// Adding the subjects to the combo box
+	for (int i = 0; i < subjectsVector.size(); i++)
+	{
+		ui.subjectsComboBox->addItem(subjectsVector[i]);
 	}
 }
 
