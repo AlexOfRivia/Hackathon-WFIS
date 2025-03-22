@@ -547,7 +547,7 @@ void StudySphere::highlightDatesWithData()
 {
     QTextCharFormat format;
 	//making highlight visible despite the stylesheet
-	format.setForeground(QColor(4, 30, 176)); //Blue Text
+    format.setForeground(QColor("#A1D6B2")); //Blue Text
 	format.setFontWeight(QFont::Bold);
     //format.setBackground(QColor(173, 216, 230)); // Light blue background
 	format.setFontPointSize(14);
